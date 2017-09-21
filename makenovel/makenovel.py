@@ -32,6 +32,11 @@ class MakeNovel():
         logger.info("Input file selected: %s" % inputFile)
         lineNo = 0
         
+        opMap = {
+            "=" : "VAL",
+            ":" : "FUN",
+        }
+        
         with open(inputFile, mode="rt") as inFile:
             
             for tmpLine in inFile:
@@ -41,29 +46,50 @@ class MakeNovel():
                 # Strip comments and whitespaces
                 tmpLine = re.sub(r"\#.*?\n","",tmpLine).strip()
                 if tmpLine == "": continue
-
-                # Find first occurence of operator
-                varOp = tmpLine.find("=")
-                funOp = tmpLine.find(":")
-                
-                nMatch = 0
-                
-                if varOp > 0:
-                    isVar   = True
-                    nMatch += 1
-                else:
-                    isVar   = False
-
-                if funOp > 0:
-                    isFun   = True
-                    nMatch += 1
-                else:
-                    isFun   = False
                 
                 print(tmpLine)
-                print(nMatch)
-                print(varOp)
-                print(funOp)
+
+                lineSearch = re.search("^[A-Za-z0-9\s]+",tmpLine)
+                if lineSearch:
+                    lineKey = tmpLine[0:lineSearch.end()].strip()
+                    lineOp  = tmpLine[lineSearch.end()]
+                    lineVal = tmpLine[lineSearch.end()+1:].strip()
+                    
+                    self.Buffer[lineNo] = ["NUL","NONE",""]
+                    if lineOp == "=":
+                        self.Buffer[lineNo][0] = "VAL"
+                    elif lineOp == ":":
+                        self.Buffer[lineNo][0] = "FUN"
+                    else:
+                        logger.error("Line %d : Unknown operator %s" % (lineNo,lineOp))
+
+                    self.Buffer[lineNo][1] = lineKey
+                    self.Buffer[lineNo][2] = lineVal
+                else:
+                    logger.error("Line %d : %s" % (lineNo,tmpLine))
+
+                # Find first occurence of operator
+                # varOp = tmpLine.find("=")
+                # funOp = tmpLine.find(":")
+                # 
+                # nMatch = 0
+                # 
+                # if varOp > 0:
+                #     isVar   = True
+                #     nMatch += 1
+                # else:
+                #     isVar   = False
+                # 
+                # if funOp > 0:
+                #     isFun   = True
+                #     nMatch += 1
+                # else:
+                #     isFun   = False
+                # 
+                # print(tmpLine)
+                # print(nMatch)
+                # print(varOp)
+                # print(funOp)
         
         return
     
