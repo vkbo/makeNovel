@@ -29,7 +29,32 @@ __email__      = "code@vkbo.net"
 __status__     = "Development"
 __url__        = "https://github.com/vkbo/makeNovel"
 
+#
+# Set up logging
+#
+
+# Add custom loglevel
+INPUT    = 60
+BUILDING = 70
+logging.addLevelName(INPUT,   "INPUT")
+logging.addLevelName(BUILDING,"BUILDING")
+
+def logInput(self, message, *args, **kws):
+    if self.isEnabledFor(INPUT):
+        self._log(INPUT, message, args, **kws) 
+
+def logBuilding(self, message, *args, **kws):
+    if self.isEnabledFor(BUILDING):
+        self._log(BUILDING, message, args, **kws) 
+
+logging.Logger.input    = logInput
+logging.Logger.building = logBuilding
+
 logger = logging.getLogger(__name__)
+
+#
+# Main program
+#
 
 def main(sysArgs):
     
@@ -55,8 +80,8 @@ def main(sysArgs):
     )
 
     # Defaults
-    debugLevel = logging.WARN
-    debugStr   = "[{asctime}] {levelname}: {message}"
+    debugLevel = logging.INFO
+    debugStr   = "{levelname:8s}  {message}"
     inputFile  = ""
     
     if len(sysArgs) == 0:
@@ -79,16 +104,16 @@ def main(sysArgs):
         elif inOpt in ("-d", "--debug"):
             if   inArg == "ERROR":
                 debugLevel = logging.ERROR
-                debugStr   = "[{asctime}] {levelname}: {message}"
+                debugStr   = "{levelname:8s}  {message}"
             elif inArg == "WARN":
                 debugLevel = logging.WARN
-                debugStr   = "[{asctime}] {levelname}: {message}"
+                debugStr   = "{levelname:8s}  {message}"
             elif inArg == "INFO":
                 debugLevel = logging.INFO
-                debugStr   = "[{asctime}] {levelname}: {message}"
+                debugStr   = "{levelname:8s}  {message}"
             elif inArg == "DEBUG":
                 debugLevel = logging.DEBUG
-                debugStr   = "[{asctime}] {name:13s} {lineno: 4d}  {levelname}: {message}"
+                debugStr   = "[{name:12s}:{lineno:4d}] {levelname:8s}  {message}"
             else:
                 print("Invalid debug level")
                 exit(2)
