@@ -51,7 +51,7 @@ class MakeNovel():
 
                 lineSearch = re.search("^[A-Za-z0-9\s]+",tmpLine)
                 if lineSearch:
-                    lineKey = tmpLine[0:lineSearch.end()].strip()
+                    lineKey = tmpLine[0:lineSearch.end()].strip().upper()
                     lineOp  = tmpLine[lineSearch.end()]
                     lineVal = tmpLine[lineSearch.end()+1:].strip()
                     
@@ -68,28 +68,6 @@ class MakeNovel():
                 else:
                     logger.error("Line %d : %s" % (lineNo,tmpLine))
 
-                # Find first occurence of operator
-                # varOp = tmpLine.find("=")
-                # funOp = tmpLine.find(":")
-                # 
-                # nMatch = 0
-                # 
-                # if varOp > 0:
-                #     isVar   = True
-                #     nMatch += 1
-                # else:
-                #     isVar   = False
-                # 
-                # if funOp > 0:
-                #     isFun   = True
-                #     nMatch += 1
-                # else:
-                #     isFun   = False
-                # 
-                # print(tmpLine)
-                # print(nMatch)
-                # print(varOp)
-                # print(funOp)
         
         return
     
