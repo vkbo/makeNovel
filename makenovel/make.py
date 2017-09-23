@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*
-"""makeNovel Init
+"""makeNovel MakeNovel Class
 
 makeNovel – MakeNovel Class
 ===========================
@@ -15,7 +15,8 @@ import re
 import logging
 import makenovel
 
-from os import path
+from os    import path
+from .book import Book
 
 logger = logging.getLogger(path.basename(__file__))
 
@@ -28,6 +29,7 @@ class MakeNovel():
         self.incFiles  = []
         self.lineNo    = []
         self.cmdStack  = []
+        self.theBook   = Book()
 
         logger.input("Master file is %s" % inputFile)
 
@@ -114,6 +116,24 @@ class MakeNovel():
                 logger.error("Unexpected input in %s line %d, aborting" % (rawName,rawLine))
                 exit(2)
 
+        return
+        
+    def buildBook(self):
+        
+        for n in range(len(self.cmdStack)):
+            if self.cmdStack[n][0] == "FUN":
+                if self.cmdStack[n][1] == "SET":
+                    if self.cmdStack[n][2] == "TITLE":
+                        self.theBook.setTitle(self.cmdStack[n][3])
+                    elif self.cmdStack[n][2] == "AUTHOR":
+                        self.theBook.addAuthor(self.cmdStack[n][3])
+                    else:
+                        logger.error("Unknown keyword '%s'" % self.cmdStack[n][2])
+                else:
+                    logger.error("Unknown keyword '%s'" % self.cmdStack[n][1])
+            else:
+                logger.error("Unexpected build error")
+        
         return
 
     def checkVariable(self,saveIdx,checkKey,checkVal):
