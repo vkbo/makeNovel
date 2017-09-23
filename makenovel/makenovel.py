@@ -73,7 +73,7 @@ class MakeNovel():
                         exit(2)
                 else:
                     self.rawBuffer.append({0:fileID,1:fileLine,2:readLine})
-                    self.cmdStack.append({0:"NUL",1:"NONE",2:""})
+                    self.cmdStack.append({0:"NUL",1:"NONE",2:"NONE",3:""})
                     logger.debug("File %d.%3d: %s" % (fileID,fileLine,readLine))
 
         logger.debug("File %d.EOF: Closing %s" % (fileID,fileName))
@@ -89,23 +89,23 @@ class MakeNovel():
             rawText = self.rawBuffer[n][2]
             rawName = self.incFiles[rawFile]
 
-            lineSearch = re.search("^[A-Za-z0-9\s]+",rawText)
+            lineSearch = re.search("^[A-Za-z0-9\s_]+",rawText)
             if lineSearch:
 
                 lineKey = rawText[0:lineSearch.end()].strip().upper()
-                lineOp  = rawText[lineSearch.end()]
-                lineVal = rawText[lineSearch.end()+1:].strip()
+                if len(rawText) > lineSearch.end():
+                    lineOp  = rawText[lineSearch.end()]
+                    lineVal = rawText[lineSearch.end()+1:].strip()
+                else:
+                    lineOp  = "¤" # Just some operator not in use
+                    lineVal = ""
 
                 if lineOp == "=":
-                    self.cmdStack[n][0] = "VAL"
-                    self.cmdStack[n][1] = lineKey
-                    self.cmdStack[n][2] = lineVal
-                    logger.debug("File %d.%3d: Variable %s is '%s'" % (rawFile,rawLine,lineKey,lineVal))
+                    self.checkVariable(n,lineKey,lineVal)
                 elif lineOp == ":":
-                    self.cmdStack[n][0] = "FUN"
-                    self.cmdStack[n][1] = lineKey
-                    self.cmdStack[n][2] = lineVal.split(";")
-                    logger.debug("File %d.%3d: Function %s with input '%s'" % (rawFile,rawLine,lineKey,lineVal))
+                    self.checkFunction(n,lineKey,lineVal)
+                elif lineOp == "¤":
+                    self.checkCommand(n,lineKey)
                 else:
                     logger.error("Unknown operator %s in %s line %d, aborting" % (lineOp,rawName,rawLine))
                     exit(2)
@@ -113,6 +113,75 @@ class MakeNovel():
             else:
                 logger.error("Unexpected input in %s line %d, aborting" % (rawName,rawLine))
                 exit(2)
+
+        return
+
+    def checkVariable(self,saveIdx,checkKey,checkVal):
+
+        fileID   = self.rawBuffer[saveIdx][0]
+        fileName = self.incFiles[fileID]
+        fileLine = self.rawBuffer[saveIdx][0]
+
+        self.cmdStack[saveIdx][0] = "VAL"
+        self.cmdStack[saveIdx][1] = ""
+        self.cmdStack[saveIdx][2] = checkKey
+        self.cmdStack[saveIdx][3] = checkVal
+
+        logger.debug("File %d.%3d: VALUE '%s' = '%s'" % (fileID,fileLine,checkKey,checkVal))
+
+        return
+
+    def checkFunction(self,saveIdx,checkKey,checkVal):
+
+        fileID   = self.rawBuffer[saveIdx][0]
+        fileName = self.incFiles[fileID]
+        fileLine = self.rawBuffer[saveIdx][0]
+
+        validFunctions = {
+            "SET" : ["TITLE","AUTHOR","FORMAT"],
+            "ADD" : ["PROLOGUE","CHAPTER","SCENE"],
+        }
+        isValid = False
+        for valType in validFunctions.keys():
+            nChars = len(valType)
+            if len(checkKey) < nChars: continue
+            if checkKey[0:nChars+1] == valType+" ":
+                funType   = valType
+                chkTarget = checkKey[nChars+1:].strip()
+                if chkTarget in validFunctions[valType]:
+                    funTarget = chkTarget
+                    funValue  = checkVal.split(";")
+                    isValid   = True
+
+        if isValid:
+            self.cmdStack[saveIdx][0] = "FUN"
+            self.cmdStack[saveIdx][1] = funType
+            self.cmdStack[saveIdx][2] = funTarget
+            self.cmdStack[saveIdx][3] = funValue
+            logger.debug("File %d.%3d: FUN '%s': '%s'" % (fileID,fileLine,checkKey,checkVal))
+        else:
+            logger.error("Unknown function call '%s' in %s line %d, aborting" % (checkKey,fileName,fileLine))
+            exit(2)
+
+        return
+
+    def checkCommand(self,saveIdx,checkKey):
+
+        fileID   = self.rawBuffer[saveIdx][0]
+        fileName = self.incFiles[fileID]
+        fileLine = self.rawBuffer[saveIdx][0]
+
+        validCommands = ["SEPARATOR"]
+
+        if checkKey in validCommands:
+            self.cmdStack[saveIdx][0] = "CMD"
+            self.cmdStack[saveIdx][1] = ""
+            self.cmdStack[saveIdx][2] = checkKey
+            self.cmdStack[saveIdx][3] = ""
+            logger.debug("File %d.%3d: CMD '%s'" % (fileID,fileLine,checkKey))
+        else:
+            logger.error("Unknown command '%s' in %s line %d, aborting" % (checkKey,fileName,fileLine))
+            exit(2)
 
         return
 
