@@ -13,12 +13,12 @@ Created: 2017-09-22 [0.1.0]
 
 import re
 import logging
-import makenovel
+import mknov
 
 from os    import path
 from .book import Book
 
-logger = logging.getLogger(path.basename(__file__))
+logger = logging.getLogger(__name__)
 
 class MakeNovel():
 
