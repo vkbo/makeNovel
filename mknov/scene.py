@@ -31,18 +31,18 @@ class Scene():
         
         if path.isfile(pathOpt1):
             logger.input("Opening scene file %s" % pathOpt1)
-            fileName, fileExt = path.splittext(pathOpt1)
+            fileName, fileExt = path.splitext(pathOpt1)
             self.filePath   = pathOpt1
             self.fileFormat = fileExt
             self.fileExists = True
         elif path.isfile(pathOpt2):
-            logger.debug("Found file %s as %s" % (inFile,))
-            fileName, fileExt = path.splittext(pathOpt2)
+            logger.debug("Found file %s as %s" % (inFile,pathOpt2))
+            fileName, fileExt = path.splitext(pathOpt2)
             self.fileName   = pathOpt2
             self.fileFormat = fileExt
             self.fileExists = True
         else:
-            logger.warn("Scene file not found %s, skipping" % inFile)
+            logger.warning("Scene file not found %s, skipping" % inFile)
         
         return
 

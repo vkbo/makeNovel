@@ -25,6 +25,8 @@ class MakeNovel():
     def __init__(self, inputFile):
 
         self.inFile    = inputFile
+        self.inFormat  = "txt"
+        self.inPath    = ""
         self.rawBuffer = []
         self.incFiles  = []
         self.lineNo    = []
@@ -64,7 +66,7 @@ class MakeNovel():
                     if path.isfile(nextFile):
                         logger.input("Including %s in %s line %d" % (nextFile,fileName,fileLine))
                         if nextFile in self.incFiles:
-                            logger.warn("Already included %s, ignoring" % nextFile)
+                            logger.warning("Already included %s, ignoring" % nextFile)
                         else:
                             self.incFiles.append(nextFile)
                             nextID = len(self.incFiles) - 1
@@ -121,16 +123,42 @@ class MakeNovel():
     def buildBook(self):
         
         for n in range(len(self.cmdStack)):
+
+            fileID   = self.rawBuffer[n][0]
+            fileName = self.incFiles[fileID]
+            fileLine = self.rawBuffer[n][1]
+
             if self.cmdStack[n][0] == "FUN":
                 if self.cmdStack[n][1] == "SET":
                     if self.cmdStack[n][2] == "TITLE":
                         self.theBook.setTitle(self.cmdStack[n][3])
-                    elif self.cmdStack[n][2] == "AUTHOR":
-                        self.theBook.addAuthor(self.cmdStack[n][3])
+                    elif self.cmdStack[n][2] == "FORMAT":
+                        if self.cmdStack[n][3][0] in ["txt","fodt"]:
+                            self.inFormat = self.cmdStack[n][3][0]
+                            logger.input("Input format set to '%s'" % self.cmdStack[n][3][0])
+                        else:
+                            logger.error("Invalid format '%s' set. Using plain text (txt)" % self.cmdStack[n][3][0])
+                            self.inFormat = "txt"
+                    elif self.cmdStack[n][2] == "INPATH":
+                        self.inPath = self.cmdStack[n][3][0]
+                        logger.input("Input path set to '%s'" % self.cmdStack[n][3][0])
                     else:
-                        logger.error("Unknown keyword '%s'" % self.cmdStack[n][2])
+                        logger.error("Unknown keyword '%s' in %s, line %d" % (self.cmdStack[n][2],fileName,fileLine))
+                elif self.cmdStack[n][1] == "ADD":
+                    if self.cmdStack[n][2] == "AUTHOR":
+                        self.theBook.addAuthor(self.cmdStack[n][3])
+                    elif self.cmdStack[n][2] == "PROLOGUE":
+                        self.theBook.addChapter("P",self.cmdStack[n][3])
+                    elif self.cmdStack[n][2] == "CHAPTER":
+                        self.theBook.addChapter("C",self.cmdStack[n][3])
+                    elif self.cmdStack[n][2] == "EPILOGUE":
+                        self.theBook.addChapter("E",self.cmdStack[n][3])
+                    elif self.cmdStack[n][2] == "SCENE":
+                        self.theBook.addScene(self.inPath,self.cmdStack[n][3][0],self.inFormat)
+                    else:
+                        logger.error("Unknown keyword '%s' in %s, line %d" % (self.cmdStack[n][2],fileName,fileLine))
                 else:
-                    logger.error("Unknown keyword '%s'" % self.cmdStack[n][1])
+                    logger.error("Unknown keyword '%s' in %s, line %d" % (self.cmdStack[n][1],fileName,fileLine))
             else:
                 logger.error("Unexpected build error")
         
@@ -140,7 +168,7 @@ class MakeNovel():
 
         fileID   = self.rawBuffer[saveIdx][0]
         fileName = self.incFiles[fileID]
-        fileLine = self.rawBuffer[saveIdx][0]
+        fileLine = self.rawBuffer[saveIdx][1]
 
         self.cmdStack[saveIdx][0] = "VAL"
         self.cmdStack[saveIdx][1] = ""
@@ -155,11 +183,11 @@ class MakeNovel():
 
         fileID   = self.rawBuffer[saveIdx][0]
         fileName = self.incFiles[fileID]
-        fileLine = self.rawBuffer[saveIdx][0]
+        fileLine = self.rawBuffer[saveIdx][1]
 
         validFunctions = {
-            "SET" : ["TITLE","AUTHOR","FORMAT"],
-            "ADD" : ["PROLOGUE","CHAPTER","SCENE"],
+            "SET" : ["TITLE","FORMAT","INPATH"],
+            "ADD" : ["AUTHOR","PROLOGUE","CHAPTER","EPILOGUE","SCENE"],
         }
         isValid = False
         for valType in validFunctions.keys():
@@ -189,7 +217,7 @@ class MakeNovel():
 
         fileID   = self.rawBuffer[saveIdx][0]
         fileName = self.incFiles[fileID]
-        fileLine = self.rawBuffer[saveIdx][0]
+        fileLine = self.rawBuffer[saveIdx][1]
 
         validCommands = ["SEPARATOR"]
 

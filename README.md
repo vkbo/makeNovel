@@ -27,7 +27,7 @@ For my writing, I use:
 ### Usage
 
 **Note:** This section is a list of features I plan to implement for the first version. This module
-is under initial development.
+is under initial development. It currently parses the input file, but doesn't generate any output.
 
 `makeNovel` takes a master layout file as its main input andparses it and generates a single
 document as output.
@@ -43,11 +43,19 @@ Example:
 
     # This is a comment
     
-    TITLE  = Best Book Title Ever
-    AUTHOR = J. Smith
+    # Include another file
+    @INC header.in
+
+    # Set default input format
+    SET FORMAT: txt
     
-    CHAPTER: Chapter One; Day 1
-        SCENE: scene-001.txt
+    SET TITLE:  Best Book Title Ever
+    SET AUTHOR: J. Smith
+    
+    ADD CHAPTER: Chapter One; Day 1
+        ADD SCENE: scene-001.txt
+        SEPARATOR
+        ADD SCENE: scene-002.txt
 
 To compile the document, use:
 
