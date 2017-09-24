@@ -47,7 +47,7 @@ document as output.
 The master document syntax is straight forward
 
     VARIABLE = varValue
-    FUNCTION: inVal1; inVal2
+    FUNCTION TARGET: inVal1; inVal2
 
 Example:
 
