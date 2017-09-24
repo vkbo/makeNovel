@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" office:mimetype="application/vnd.oasis.opendocument.text" office:version="1.2">
+ <office:styles>
+  <style:style style:name="Normal" style:display-name="Normal" style:family="paragraph">
+   <style:text-properties fo:font-size="12pt" fo:font-weight="normal"/>
+   <style:paragraph-properties $ALIGN/>
+  </style:style>
+  <style:style style:name="Chapter" style:display-name="Chapter" style:family="paragraph" style:parent-style-name="Normal" style:next-style-name="Normal" style:default-outline-level="1" style:class="text">
+   <style:text-properties fo:font-size="18pt" fo:font-weight="bold"/>
+   <style:paragraph-properties fo:margin-bottom="1.27cm" fo:break-before="page"/>
+  </style:style>
+  <style:style style:name="SepTitle" style:display-name="SepTitle" style:family="paragraph" style:parent-style-name="Normal" style:next-style-name="Normal" style:class="text">
+   <style:text-properties fo:font-size="14pt"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-bottom="0.635cm"/>
+  </style:style>
+  <style:style style:name="Separator" style:display-name="Separator" style:family="paragraph" style:parent-style-name="Normal" style:next-style-name="Normal" style:class="text">
+   <style:text-properties fo:font-size="12pt"/>
+   <style:paragraph-properties fo:text-align="center" fo:margin-top="0.635cm" fo:margin-bottom="0.635cm"/>
+  </style:style>
+ </office:styles>
+ <office:automatic-styles>
+ </office:automatic-styles>
+ <office:body>
+  <office:text>

@@ -33,13 +33,16 @@ do work fairly well, but I prefer even simpler tools. The two main tools I use a
 
 ### Usage
 
-**Note:** This section is a list of features I plan to implement for the first version. This module
-is under initial development. It currently parses the input file, but doesn't generate any output.
+Only a bare minimum of functionality is implemented. But all the commands below work. At the moment
+`makeNovel` only works with fodt files. These can be written by FocusWriter, and opened in
+LibreOffice and OpenOffice (and perhaps Microsoft Word).
+
+#### Master File Format
 
 `makeNovel` takes a master layout file as its main input andparses it and generates a single
 document as output.
 
-#### General Syntax
+##### General Syntax
 
 The master document syntax is straight forward
 
@@ -64,11 +67,42 @@ Example:
         SEPARATOR
         ADD SCENE: scene-002.txt
 
+##### All Commands
+
+###### SET Commands
+
+* `TITLE`: The book title
+* `FORMAT`: Assumed format of input files. Accepts txt and fodt. Will also support html.
+* `INPATH`: Root folder of scene files. This is where the script starts to look. If you organise
+   the files in folders under that, the relative path needs to be added to the `ADD SCENE` entry.
+* `SEPARATOR`: Sets the text used for separators inserted with the `SEPARATOR` command. Default
+   value is `***`.
+* `JUSTIFY`: Set to `ON`, `TRUE` or `1` to enable straight margins for paragraphs.
+
+###### ADD Commands
+
+* `AUTHOR`: Adds an author to the list of authors. Separate multiple authors with `;`. The command
+   can also be run multiple times to add authors.
+* `PROLOGUE`: Adds a prologue section to the novel. Title is an optional argument.
+* `CHAPTER`: Adds a chapter section to the novel. Each command increases the chapter number by one.
+   Title is an optional argument.
+* `EPILOGUE`: Adds an epilogue section to the novel. Title is an optional argument.
+* `SCENE`: Adds a scene to the most recently added prologue, chapter or epilogue. If a scene is
+   added before any of these have been defined, an error is reported.
+* `SEPTITLE`: Adds a separating title before the next scene.
+
+###### Other Commands
+
+* `BREAK`: Adds a blank paragraph. Can be used as a short break between scenes.
+* `SEPARATOR`: Adds a paragraph with the text defined by `SET SEPARATOR` between two scenes.
+
+#### Run makeNovel
+
 To compile the document, use:
 
     makeNovel -i path/to/master-file.conf
 
-#### Full list of arguments:
+##### Full list of arguments:
 
 | Short | Long        | Description                                                      | Default |
 |-------|-------------|------------------------------------------------------------------|---------|

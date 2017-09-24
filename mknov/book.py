@@ -15,8 +15,9 @@ import re
 import logging
 import mknov
 
-from os    import path
-from .scene import Scene
+from os       import path, getcwd
+from textwrap import dedent
+from .scene   import Scene
 
 logger = logging.getLogger(__name__)
 
@@ -27,20 +28,35 @@ class Book():
         self.bookTitle    = ""
         self.bookSubTitle = ""
         self.bookAuthor   = []
-
+        
         self.chapterNames = {"P":"Prologue","C":"Chapter","E":"Epilogue"}
         self.chapterNum   = 0
         self.chapterIdx   = -1
         self.chapterData  = {}
-
+        
         self.sceneIdx     = -1
         self.sceneData    = {}
+        self.sceneSepText = "***"
+        
+        self.parJustify   = False
+        
+        self.includePath  = path.join(path.dirname(path.abspath(__file__)),"includes")
         
         return
     
-    def setTitle(self,bookTitle):
-        self.bookTitle = bookTitle[0]
-        logger.build("Book title set to '%s'" % bookTitle[0])
+    def setValue(self,valName,valData):
+        if valName == "Title":
+            self.bookTitle = valData[0]
+            logger.build("Book title set to '%s'" % valData[0])
+        elif valName == "Justify":
+            if valData[0].upper() in ("ON","TRUE","1"):
+                self.parJustify = True
+                logger.build("Paragraph alignment set to justify")
+            else:
+                self.parJustify = False
+        elif valName == "Separator":
+            self.sceneSepText = valData[0]
+            logger.build("Scene separator text set to '%s'" % self.sceneSepText)
         return True
         
     def addAuthor(self,bookAuthor):
@@ -95,7 +111,7 @@ class Book():
             return False
         
         self.sceneIdx += 1
-
+        
         chType = self.chapterData[self.chapterIdx]["Type"]
         chNum  = self.chapterData[self.chapterIdx]["Number"]
         if chType == "P":
@@ -107,11 +123,90 @@ class Book():
         
         logger.build("Adding scene '%s' as SCN%04d to %s" % (inFile,self.sceneIdx,sceneTarget))
         self.sceneData[self.sceneIdx] = {
-            "Type"  : "File",
-            "Scene" : Scene(inPath,inFile,inFormat),
+            "Type" : "File",
+            "Data" : Scene(inPath,inFile,inFormat),
         }
         self.chapterData[self.chapterIdx]["Scenes"].append(self.sceneIdx)
+        
+        return True
+    
+    def addSepItem(self,sepType,sepData=""):
+        
+        if self.chapterIdx < 0:
+            logger.error("No chapter to add separator item to")
+            return False
+        
+        self.sceneIdx += 1
+        
+        chType = self.chapterData[self.chapterIdx]["Type"]
+        chNum  = self.chapterData[self.chapterIdx]["Number"]
+        if chType == "P":
+            sceneTarget = "Prologue"
+        elif chType == "E":
+            sceneTarget = "Epilogue"
+        else:
+            sceneTarget = "Chapter %d" % chNum
 
+        if sepType == "SepTitle":
+            logger.build("Adding separator title '%s' as ELM%04d to %s" % (sepData,self.sceneIdx,sceneTarget))
+        elif sepType == "Break":
+            logger.build("Adding break as ELM%04d to %s" % (self.sceneIdx,sceneTarget))
+        elif sepType == "Separator":
+            logger.build("Adding separator as ELM%04d to %s" % (self.sceneIdx,sceneTarget))
+
+        self.sceneData[self.sceneIdx] = {
+            "Type" : sepType,
+            "Data" : sepData,
+        }
+        self.chapterData[self.chapterIdx]["Scenes"].append(self.sceneIdx)
+        
+        return True
+    
+    def buildFODT(self):
+        
+        if self.parJustify:
+            parAlign = "fo:text-align=\"justify\" style:justify-single-word=\"false\" style:writing-mode=\"page\""
+        else:
+            parAlign = ""
+        
+        with open(path.join(self.includePath,"header.fodt"),mode="rt") as headerFile:
+            outHeader = headerFile.read()
+            outHeader = outHeader.replace("$ALIGN",parAlign)
+        
+        with open(path.join(self.includePath,"footer.fodt"),mode="rt") as footerFile:
+            outFooter = footerFile.read()
+        
+        outPath = path.join(getcwd(),"novel.fodt")
+        with open(outPath,mode="wt") as outFile:
+            
+            # Write Header
+            outFile.write(outHeader)
+            
+            for ch in range(self.chapterIdx+1):
+                chType  = self.chapterData[ch]["Type"]
+                chNum   = self.chapterData[ch]["Number"]
+                chTitle = self.chapterData[ch]["Title"]
+                chName  = self.chapterNames[chType]
+                if chType == "C":     chName = "%s %d" % (chName,chNum)
+                if not chTitle == "": chName = "%s:<text:line-break/>%s" % (chName,chTitle)
+                # outFile.write("   <text:h text:style-name=\"P1\"/>\n")
+                outFile.write("   <text:h text:style-name=\"Chapter\">%s</text:h>\n" % chName)
+                for scn in self.chapterData[ch]["Scenes"]:
+                    scnType = self.sceneData[scn]["Type"]
+                    scnData = self.sceneData[scn]["Data"]
+                    if scnType == "File":
+                        for p in scnData.Paragraphs:
+                            outFile.write("   %s\n" % p)
+                    elif scnType == "SepTitle":
+                        outFile.write("   <text:p text:style-name=\"SepTitle\">%s</text:p>\n" % scnData)
+                    elif scnType == "Break":
+                        outFile.write("   <text:p text:style-name=\"Normal\"/>\n")
+                    elif scnType == "Separator":
+                        outFile.write("   <text:p text:style-name=\"Separator\">%s</text:p>\n" % self.sceneSepText)
+            
+            # Write Footer
+            outFile.write(outFooter)
+        
         return True
 
 # End Class Book

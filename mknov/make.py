@@ -131,7 +131,7 @@ class MakeNovel():
             if self.cmdStack[n][0] == "FUN":
                 if self.cmdStack[n][1] == "SET":
                     if self.cmdStack[n][2] == "TITLE":
-                        self.theBook.setTitle(self.cmdStack[n][3])
+                        self.theBook.setValue("Title",self.cmdStack[n][3])
                     elif self.cmdStack[n][2] == "FORMAT":
                         if self.cmdStack[n][3][0] in ["txt","fodt"]:
                             self.inFormat = self.cmdStack[n][3][0]
@@ -142,6 +142,10 @@ class MakeNovel():
                     elif self.cmdStack[n][2] == "INPATH":
                         self.inPath = self.cmdStack[n][3][0]
                         logger.input("Input path set to '%s'" % self.cmdStack[n][3][0])
+                    elif self.cmdStack[n][2] == "SEPARATOR":
+                        self.theBook.setValue("Separator",self.cmdStack[n][3])
+                    elif self.cmdStack[n][2] == "JUSTIFY":
+                        self.theBook.setValue("Justify",self.cmdStack[n][3])
                     else:
                         logger.error("Unknown keyword '%s' in %s, line %d" % (self.cmdStack[n][2],fileName,fileLine))
                 elif self.cmdStack[n][1] == "ADD":
@@ -155,12 +159,22 @@ class MakeNovel():
                         self.theBook.addChapter("E",self.cmdStack[n][3])
                     elif self.cmdStack[n][2] == "SCENE":
                         self.theBook.addScene(self.inPath,self.cmdStack[n][3][0],self.inFormat)
+                    elif self.cmdStack[n][2] == "SEPTITLE":
+                        self.theBook.addSepItem("SepTitle",self.cmdStack[n][3][0])
                     else:
                         logger.error("Unknown keyword '%s' in %s, line %d" % (self.cmdStack[n][2],fileName,fileLine))
                 else:
                     logger.error("Unknown keyword '%s' in %s, line %d" % (self.cmdStack[n][1],fileName,fileLine))
+            elif self.cmdStack[n][0] == "CMD":
+                if self.cmdStack[n][1] == "BREAK":
+                    self.theBook.addSepItem("Break")
+                elif self.cmdStack[n][1] == "SEPARATOR":
+                    self.theBook.addSepItem("Separator")
             else:
                 logger.error("Unexpected build error")
+        
+        # Build Target
+        self.theBook.buildFODT()
         
         return
 
@@ -186,8 +200,8 @@ class MakeNovel():
         fileLine = self.rawBuffer[saveIdx][1]
 
         validFunctions = {
-            "SET" : ["TITLE","FORMAT","INPATH"],
-            "ADD" : ["AUTHOR","PROLOGUE","CHAPTER","EPILOGUE","SCENE"],
+            "SET" : ["TITLE","FORMAT","INPATH","SEPARATOR","JUSTIFY"],
+            "ADD" : ["AUTHOR","PROLOGUE","CHAPTER","EPILOGUE","SCENE","SEPTITLE"],
         }
         isValid = False
         for valType in validFunctions.keys():
@@ -219,12 +233,12 @@ class MakeNovel():
         fileName = self.incFiles[fileID]
         fileLine = self.rawBuffer[saveIdx][1]
 
-        validCommands = ["SEPARATOR"]
+        validCommands = ["BREAK","SEPARATOR"]
 
         if checkKey in validCommands:
             self.cmdStack[saveIdx][0] = "CMD"
-            self.cmdStack[saveIdx][1] = ""
-            self.cmdStack[saveIdx][2] = checkKey
+            self.cmdStack[saveIdx][1] = checkKey
+            self.cmdStack[saveIdx][2] = ""
             self.cmdStack[saveIdx][3] = ""
             logger.debug("File %d.%3d: CMD '%s'" % (fileID,fileLine,checkKey))
         else:
