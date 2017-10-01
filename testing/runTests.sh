@@ -1,11 +1,9 @@
 #!/bin/bash
 
-# echo -n "........................................................................"
-# echo -n "................................................................. Passed"
-
 IND="     "
+MAX=2
 
-echo -n " 1/2  Testing: makeNovel FODT to FODT ........................... "
+echo -n " 1/$MAX  Testing: makeNovel FODT to FODT ........................... "
 cd fodt
 ../../makeNovel.py -i novel.cnf -f FODT -d DEBUG -q -l novel-fodt.log
 LOGDIFF=$(diff -q novel-fodt.log novel-fodt.log.reference)
@@ -23,7 +21,7 @@ if [ $OUTRES -eq 0 ]; then echo "$IND FODT output file OK"; else
 fi
 cd ..
 
-echo -n " 2/2  Testing: makeNovel TXT to FODT ............................ "
+echo -n " 2/$MAX  Testing: makeNovel TXT to FODT ............................ "
 cd txt
 ../../makeNovel.py -i novel.cnf -f FODT -d DEBUG -q -l novel-fodt.log
 LOGDIFF=$(diff -q novel-fodt.log novel-fodt.log.reference)
