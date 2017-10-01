@@ -1,0 +1,26 @@
+#
+# Lorem Ipsum in TXT
+#
+
+@INC settings.cnf
+
+SET TITLE:  Lorum Ipsum in TXT
+ADD AUTHOR: J. Smith
+
+ADD PROLOGUE:
+    ADD SCENE: scene003
+
+ADD CHAPTER: Lorem
+    ADD SEPTITLE: The First
+    ADD SCENE: scene001
+    SEPARATOR
+    ADD SCENE: scene003
+
+ADD CHAPTER: Ipsum
+    ADD SEPTITLE: The Second
+    ADD SCENE: scene002
+    SEPARATOR
+    ADD SCENE: scene001
+
+ADD EPILOGUE:
+    ADD SCENE: scene002

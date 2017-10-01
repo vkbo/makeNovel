@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" office:mimetype="application/vnd.oasis.opendocument.text" office:version="1.2">
+ <office:styles>
+  <style:style style:name="Normal" style:display-name="Normal" style:family="paragraph">
+   <style:text-properties fo:font-size="12pt" fo:font-weight="normal"/>
+  </style:style>
+  <style:style style:name="Heading-1" style:display-name="Heading 1" style:family="paragraph" style:parent-style-name="Normal" style:next-style-name="Normal" style:default-outline-level="1">
+   <style:text-properties fo:font-size="18pt" fo:font-weight="bold"/>
+  </style:style>
+  <style:style style:name="Heading-2" style:display-name="Heading 2" style:family="paragraph" style:parent-style-name="Normal" style:next-style-name="Normal" style:default-outline-level="2">
+   <style:text-properties fo:font-size="16pt" fo:font-weight="bold"/>
+  </style:style>
+  <style:style style:name="Heading-3" style:display-name="Heading 3" style:family="paragraph" style:parent-style-name="Normal" style:next-style-name="Normal" style:default-outline-level="3">
+   <style:text-properties fo:font-size="14pt" fo:font-weight="bold"/>
+  </style:style>
+  <style:style style:name="Heading-4" style:display-name="Heading 4" style:family="paragraph" style:parent-style-name="Normal" style:next-style-name="Normal" style:default-outline-level="4">
+   <style:text-properties fo:font-size="12pt" fo:font-weight="bold"/>
+  </style:style>
+  <style:style style:name="Heading-5" style:display-name="Heading 5" style:family="paragraph" style:parent-style-name="Normal" style:next-style-name="Normal" style:default-outline-level="5">
+   <style:text-properties fo:font-size="10pt" fo:font-weight="bold"/>
+  </style:style>
+  <style:style style:name="Heading-6" style:display-name="Heading 6" style:family="paragraph" style:parent-style-name="Normal" style:next-style-name="Normal" style:default-outline-level="6">
+   <style:text-properties fo:font-size="8pt" fo:font-weight="bold"/>
+  </style:style>
+ </office:styles>
+ <office:automatic-styles/>
+ <office:body>
+  <office:text>
+   <text:p text:style-name="Normal">Egestas sed tempus urna et pharetra pharetra massa massa ultricies. Penatibus et magnis dis parturient montes nascetur. Dignissim sodales ut eu sem integer. Montes nascetur ridiculus mus mauris vitae. Sociis natoque penatibus et magnis dis parturient montes nascetur. Magna fermentum iaculis eu non diam phasellus. Posuere ac ut consequat semper viverra nam libero justo laoreet. Sit amet luctus venenatis lectus magna fringilla. Ultrices vitae auctor eu augue ut lectus. Morbi tincidunt ornare massa eget egestas. Feugiat nisl pretium fusce id velit. Tortor dignissim convallis aenean et. Semper viverra nam libero justo laoreet sit amet. Auctor elit sed vulputate mi sit amet mauris. Vel pharetra vel turpis nunc eget lorem. Diam quam nulla porttitor massa. Varius duis at consectetur lorem donec massa sapien. Malesuada proin libero nunc consequat.</text:p>
+   <text:p text:style-name="Normal"><text:tab/>Pretium quam vulputate dignissim suspendisse in est ante in. Adipiscing vitae proin sagittis nisl rhoncus mattis rhoncus urna. Volutpat ac tincidunt vitae semper quis. Egestas egestas fringilla phasellus faucibus scelerisque eleifend. Mus mauris vitae ultricies leo integer. Sem viverra aliquet eget sit amet tellus. Mus mauris vitae ultricies leo. Fames ac turpis egestas maecenas pharetra convallis posuere. Luctus accumsan tortor posuere ac ut consequat semper viverra nam. Id velit ut tortor pretium viverra. Ut diam quam nulla porttitor massa id neque aliquam vestibulum. At quis risus sed vulputate odio. Sem integer vitae justo eget. Molestie at elementum eu facilisis sed odio morbi quis commodo. Faucibus in ornare quam viverra. Imperdiet nulla malesuada pellentesque elit eget gravida cum. Ut pharetra sit amet aliquam.</text:p>
+   <text:p text:style-name="Normal"><text:tab/>Faucibus vitae aliquet nec ullamcorper sit amet risus nullam. Velit scelerisque in dictum non consectetur. Et netus et malesuada fames ac turpis egestas integer eget. Nullam non nisi est sit amet facilisis. Dictumst vestibulum rhoncus est pellentesque elit ullamcorper dignissim cras. Mattis vulputate enim nulla aliquet porttitor. Adipiscing elit ut aliquam purus sit. Non curabitur gravida arcu ac tortor dignissim convallis aenean. Odio pellentesque diam volutpat commodo sed egestas egestas fringilla. Bibendum neque egestas congue quisque. Vestibulum morbi blandit cursus risus at ultrices mi. Volutpat lacus laoreet non curabitur. Mi quis hendrerit dolor magna eget est. Urna id volutpat lacus laoreet non curabitur gravida arcu. Tincidunt vitae semper quis lectus nulla at volutpat. Habitasse platea dictumst vestibulum rhoncus. Neque volutpat ac tincidunt vitae semper quis lectus nulla at.</text:p>
+  </office:text>
+ </office:body>
+</office:document>

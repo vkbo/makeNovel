@@ -1,0 +1,24 @@
+[mknov.make  :  36] INPUT     Master file is novel.cnf
+[mknov.make  :  67] INPUT     Including settings.cnf in novel.cnf line 5
+[mknov.make  :  67] INPUT     Including novel.cnf in settings.cnf line 12
+[mknov.make  :  69] WARNING   Already included novel.cnf, ignoring
+[mknov.make  : 138] INPUT     Input format set to 'txt'
+[mknov.make  : 144] INPUT     Input path set to 'scenes'
+[mknov.book  :  54] BUILD     Paragraph alignment set to justify
+[mknov.book  :  59] BUILD     Scene separator text set to '* * *'
+[mknov.book  :  50] BUILD     Book title set to 'Lorum Ipsum in TXT'
+[mknov.book  :  65] BUILD     Added author 'J. Smith'
+[mknov.book  :  82] BUILD     Adding Prologue
+[mknov.book  : 124] BUILD     Adding scene 'scene003' as SCN0000 to Prologue
+[mknov.book  :  96] BUILD     Adding Chapter 1 titled 'Lorem'
+[mknov.book  : 151] BUILD     Adding separator title 'The First' as ELM0001 to Chapter 1
+[mknov.book  : 124] BUILD     Adding scene 'scene001' as SCN0002 to Chapter 1
+[mknov.book  : 155] BUILD     Adding separator as ELM0003 to Chapter 1
+[mknov.book  : 124] BUILD     Adding scene 'scene003' as SCN0004 to Chapter 1
+[mknov.book  :  96] BUILD     Adding Chapter 2 titled 'Ipsum'
+[mknov.book  : 151] BUILD     Adding separator title 'The Second' as ELM0005 to Chapter 2
+[mknov.book  : 124] BUILD     Adding scene 'scene002' as SCN0006 to Chapter 2
+[mknov.book  : 155] BUILD     Adding separator as ELM0007 to Chapter 2
+[mknov.book  : 124] BUILD     Adding scene 'scene001' as SCN0008 to Chapter 2
+[mknov.book  :  82] BUILD     Adding Epilogue
+[mknov.book  : 124] BUILD     Adding scene 'scene002' as SCN0009 to Epilogue

@@ -1,0 +1,12 @@
+#
+# Lorem Ipsum in FODT
+#
+
+# Settings
+SET FORMAT: fodt
+SET INPATH: scenes
+SET JUSTIFY: On
+SET SEPARATOR: * * *
+
+# Test circular includes
+@INC novel.cnf
