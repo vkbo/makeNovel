@@ -104,9 +104,12 @@ To compile the document, use:
 
 ##### Full list of arguments:
 
-| Short | Long        | Description                                                      | Default |
-|-------|-------------|------------------------------------------------------------------|---------|
-| `-i`  | `--infile=` | Input file that descripes the novel layout.                      | None    |
-| `-d`  | `--debug=`  | Chose debug level. Valid inputs are ERROR, WARN, INFO and DEBUG. | WARN    |
-| `-h`  | `--help`    | Prints help text and exits.                                      |         |
-| `-v`  | `--version` | Prints version and exits.                                        |         |
+| Short | Long         | Description                                                      | Default |
+|-------|--------------|------------------------------------------------------------------|---------|
+| `-i`  | `--infile=`  | Input file that descripes the novel layout.                      | None    |
+| `-f`  | `--format=`  | Output file format. Valid inputs are FODT, TXT and HTM           | FODT    |
+| `-d`  | `--debug=`   | Chose debug level. Valid inputs are ERROR, WARN, INFO and DEBUG. | WARN    |
+| `-q`  | `--quiet`    | Disables output to command line.                                 |         |
+| `-l`  | `--logfile=` | Write parsing output to logfile.                                 |         |
+| `-h`  | `--help`     | Prints help text and exits.                                      |         |
+| `-v`  | `--version`  | Prints version and exits.                                        |         |
