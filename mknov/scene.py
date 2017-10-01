@@ -79,7 +79,7 @@ class Scene():
                 self.Paragraphs.append(parBuffer)
                 nPar += 1
 
-        logger.debug("Read %d paragraphs" % nPar)
+        logger.info("Read %d paragraphs" % nPar)
         
         return True
 
@@ -91,6 +91,7 @@ class Scene():
         inPar     = False
         nStart    = 0
         nStop     = 0
+        nEmpty    = 0
         with open(self.fileName,mode="rt") as inFile:
             for readLine in inFile:
                 readLine = readLine.strip()
@@ -104,11 +105,18 @@ class Scene():
                     parBuffer = ""
                     inPar     = False
                     nStop    += 1
+                if readLine[-2:] == "/>" and inPar:
+                    self.Paragraphs.append(parBuffer)
+                    parBuffer = ""
+                    inPar     = False
+                    nEmpty   += 1
         
-        if not nStart == nStop:
-            logger.warning("Parser found %d open and %d close tags in scene file" % (nStart,nStop))
+        if nStart == nStop:
+            logger.info("Read %d paragraphs" % nStart)
+        elif nStart == nStop + nEmpty:
+            logger.info("Read %d paragraphs, %d of them empty" % (nStart,nEmpty))
         else:
-            logger.debug("Read %d paragraphs" % nStart)
+            logger.warning("Parser found %d open and %d close tags in scene file" % (nStart,nStop+nEmpty))
         
         return True
 

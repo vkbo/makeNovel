@@ -141,6 +141,7 @@ def main(sysArgs):
     # Set Logging
     logFmt  = logging.Formatter(fmt=debugStr,datefmt="%Y-%m-%d %H:%M:%S",style="{")
     cHandle = logging.StreamHandler()
+    logger.setLevel(debugLevel)
     
     if not logFile == "" and toFile:
         if path.isfile(logFile+".bak"):

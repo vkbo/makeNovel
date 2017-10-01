@@ -1,7 +1,54 @@
 [mknov.make  :  36] INPUT     Master file is novel.cnf
+[mknov.make  :  42] INFO      Reading master file ...
+[mknov.make  :  57] DEBUG     File 0.BOF: Reading novel.cnf
 [mknov.make  :  67] INPUT     Including settings.cnf in novel.cnf line 5
+[mknov.make  :  73] DEBUG     File 0.  5: @INC settings.cnf
+[mknov.make  :  57] DEBUG     File 1.BOF: Reading settings.cnf
+[mknov.make  :  81] DEBUG     File 1.  6: SET FORMAT: txt
+[mknov.make  :  81] DEBUG     File 1.  7: SET INPATH: scenes
+[mknov.make  :  81] DEBUG     File 1.  8: SET JUSTIFY: On
+[mknov.make  :  81] DEBUG     File 1.  9: SET SEPARATOR: * * *
 [mknov.make  :  67] INPUT     Including novel.cnf in settings.cnf line 12
 [mknov.make  :  69] WARNING   Already included novel.cnf, ignoring
+[mknov.make  :  83] DEBUG     File 1.EOF: Closing settings.cnf
+[mknov.make  :  81] DEBUG     File 0.  7: SET TITLE:  Lorum Ipsum in TXT
+[mknov.make  :  81] DEBUG     File 0.  8: ADD AUTHOR: J. Smith
+[mknov.make  :  81] DEBUG     File 0. 10: ADD PROLOGUE:
+[mknov.make  :  81] DEBUG     File 0. 11: ADD SCENE: scene003
+[mknov.make  :  81] DEBUG     File 0. 13: ADD CHAPTER: Lorem
+[mknov.make  :  81] DEBUG     File 0. 14: ADD SEPTITLE: The First
+[mknov.make  :  81] DEBUG     File 0. 15: ADD SCENE: scene001
+[mknov.make  :  81] DEBUG     File 0. 16: SEPARATOR
+[mknov.make  :  81] DEBUG     File 0. 17: ADD SCENE: scene003
+[mknov.make  :  81] DEBUG     File 0. 19: ADD CHAPTER: Ipsum
+[mknov.make  :  81] DEBUG     File 0. 20: ADD SEPTITLE: The Second
+[mknov.make  :  81] DEBUG     File 0. 21: ADD SCENE: scene002
+[mknov.make  :  81] DEBUG     File 0. 22: SEPARATOR
+[mknov.make  :  81] DEBUG     File 0. 23: ADD SCENE: scene001
+[mknov.make  :  81] DEBUG     File 0. 25: ADD EPILOGUE:
+[mknov.make  :  81] DEBUG     File 0. 26: ADD SCENE: scene002
+[mknov.make  :  83] DEBUG     File 0.EOF: Closing novel.cnf
+[mknov.make  :  45] INFO      Parsing buffer ...
+[mknov.make  : 230] DEBUG     File 1.  6: FUN 'SET FORMAT': 'txt'
+[mknov.make  : 230] DEBUG     File 1.  7: FUN 'SET INPATH': 'scenes'
+[mknov.make  : 230] DEBUG     File 1.  8: FUN 'SET JUSTIFY': 'On'
+[mknov.make  : 230] DEBUG     File 1.  9: FUN 'SET SEPARATOR': '* * *'
+[mknov.make  : 230] DEBUG     File 0.  7: FUN 'SET TITLE': 'Lorum Ipsum in TXT'
+[mknov.make  : 230] DEBUG     File 0.  8: FUN 'ADD AUTHOR': 'J. Smith'
+[mknov.make  : 230] DEBUG     File 0. 10: FUN 'ADD PROLOGUE': ''
+[mknov.make  : 230] DEBUG     File 0. 11: FUN 'ADD SCENE': 'scene003'
+[mknov.make  : 230] DEBUG     File 0. 13: FUN 'ADD CHAPTER': 'Lorem'
+[mknov.make  : 230] DEBUG     File 0. 14: FUN 'ADD SEPTITLE': 'The First'
+[mknov.make  : 230] DEBUG     File 0. 15: FUN 'ADD SCENE': 'scene001'
+[mknov.make  : 250] DEBUG     File 0. 16: CMD 'SEPARATOR'
+[mknov.make  : 230] DEBUG     File 0. 17: FUN 'ADD SCENE': 'scene003'
+[mknov.make  : 230] DEBUG     File 0. 19: FUN 'ADD CHAPTER': 'Ipsum'
+[mknov.make  : 230] DEBUG     File 0. 20: FUN 'ADD SEPTITLE': 'The Second'
+[mknov.make  : 230] DEBUG     File 0. 21: FUN 'ADD SCENE': 'scene002'
+[mknov.make  : 250] DEBUG     File 0. 22: CMD 'SEPARATOR'
+[mknov.make  : 230] DEBUG     File 0. 23: FUN 'ADD SCENE': 'scene001'
+[mknov.make  : 230] DEBUG     File 0. 25: FUN 'ADD EPILOGUE': ''
+[mknov.make  : 230] DEBUG     File 0. 26: FUN 'ADD SCENE': 'scene002'
 [mknov.make  : 138] INPUT     Input format set to 'txt'
 [mknov.make  : 144] INPUT     Input path set to 'scenes'
 [mknov.book  :  54] BUILD     Paragraph alignment set to justify
@@ -10,15 +57,27 @@
 [mknov.book  :  65] BUILD     Added author 'J. Smith'
 [mknov.book  :  82] BUILD     Adding Prologue
 [mknov.book  : 124] BUILD     Adding scene 'scene003' as SCN0000 to Prologue
+[mknov.scene :  40] DEBUG     Found file scene003 as scenes/scene003.txt
+[mknov.scene :  82] INFO      Read 3 paragraphs
 [mknov.book  :  96] BUILD     Adding Chapter 1 titled 'Lorem'
 [mknov.book  : 151] BUILD     Adding separator title 'The First' as ELM0001 to Chapter 1
 [mknov.book  : 124] BUILD     Adding scene 'scene001' as SCN0002 to Chapter 1
+[mknov.scene :  40] DEBUG     Found file scene001 as scenes/scene001.txt
+[mknov.scene :  82] INFO      Read 4 paragraphs
 [mknov.book  : 155] BUILD     Adding separator as ELM0003 to Chapter 1
 [mknov.book  : 124] BUILD     Adding scene 'scene003' as SCN0004 to Chapter 1
+[mknov.scene :  40] DEBUG     Found file scene003 as scenes/scene003.txt
+[mknov.scene :  82] INFO      Read 3 paragraphs
 [mknov.book  :  96] BUILD     Adding Chapter 2 titled 'Ipsum'
 [mknov.book  : 151] BUILD     Adding separator title 'The Second' as ELM0005 to Chapter 2
 [mknov.book  : 124] BUILD     Adding scene 'scene002' as SCN0006 to Chapter 2
+[mknov.scene :  40] DEBUG     Found file scene002 as scenes/scene002.txt
+[mknov.scene :  82] INFO      Read 8 paragraphs
 [mknov.book  : 155] BUILD     Adding separator as ELM0007 to Chapter 2
 [mknov.book  : 124] BUILD     Adding scene 'scene001' as SCN0008 to Chapter 2
+[mknov.scene :  40] DEBUG     Found file scene001 as scenes/scene001.txt
+[mknov.scene :  82] INFO      Read 4 paragraphs
 [mknov.book  :  82] BUILD     Adding Epilogue
 [mknov.book  : 124] BUILD     Adding scene 'scene002' as SCN0009 to Epilogue
+[mknov.scene :  40] DEBUG     Found file scene002 as scenes/scene002.txt
+[mknov.scene :  82] INFO      Read 8 paragraphs

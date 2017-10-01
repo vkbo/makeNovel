@@ -188,15 +188,18 @@ class Book():
                 chTitle = self.chapterData[ch]["Title"]
                 chName  = self.chapterNames[chType]
                 if chType == "C":     chName = "%s %d" % (chName,chNum)
-                if not chTitle == "": chName = "%s:<text:line-break/>%s" % (chName,chTitle)
+                if not chTitle == "": chName = "%s: %s" % (chName,chTitle)
                 # outFile.write("   <text:h text:style-name=\"P1\"/>\n")
                 outFile.write("   <text:h text:style-name=\"Chapter\">%s</text:h>\n" % chName)
                 for scn in self.chapterData[ch]["Scenes"]:
                     scnType = self.sceneData[scn]["Type"]
                     scnData = self.sceneData[scn]["Data"]
                     if scnType == "File":
-                        for p in scnData.Paragraphs:
-                            outFile.write("   %s\n" % p)
+                        parNum = 0
+                        for parTxt in scnData.Paragraphs:
+                            parNum += 1
+                            parFODT = self.parToFODT(scnData.fileFormat,parTxt,parNum)
+                            outFile.write("   %s\n" % parFODT)
                     elif scnType == "SepTitle":
                         outFile.write("   <text:p text:style-name=\"SepTitle\">%s</text:p>\n" % scnData)
                     elif scnType == "Break":
@@ -216,5 +219,31 @@ class Book():
     def buildHTM(self):
         logger.error("HTM output not implemented yet.")
         return False
+
+    def parToFODT(self, inFormat, inPar, parNum):
+        
+        if inFormat == "FODT":
+            # Same format, nothing to do
+            return inPar
+        
+        if inFormat == "TXT":
+            # Remove whitespaces, including tabs
+            outPar = inPar.strip()
+            
+            # Replace any existing < or >
+            outPar = outPar.replace("<","&lt;")
+            outPar = outPar.replace(">","&gt;")
+            
+            # Add back initial tab for second or later paragraph
+            if parNum > 1: outPar = "\t"+outPar
+            
+            # Replace other formatting
+            outPar = outPar.replace("\t","<text:tab/>")
+            
+            # Wrap and rerturn
+            outPar = "<text:p text:style-name=\"Normal\">%s</text:p>" % outPar
+            return outPar
+        
+        return None
 
 # End Class Book

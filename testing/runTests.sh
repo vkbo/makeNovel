@@ -12,6 +12,12 @@ OUTDIFF=$(diff -q novel.fodt novel.fodt.reference)
 OUTRES=$?
 if [ $LOGRES -eq 0 ] && [ $OUTRES -eq 0 ]; then
     echo "Passed"
+    if [ $LOGRES -eq 0 ]; then
+        echo "     Log file OK"
+    fi
+    if [ $OUTRES -eq 0 ]; then
+        echo "     FODT output file OK"
+    fi
 else
     echo "Failed"
     if [ $LOGRES -gt 0 ]; then
@@ -34,6 +40,12 @@ OUTDIFF=$(diff -q novel.fodt novel.fodt.reference)
 OUTRES=$?
 if [ $LOGRES -eq 0 ] && [ $OUTRES -eq 0 ]; then
     echo "Passed"
+    if [ $LOGRES -eq 0 ]; then
+        echo "     Log file OK"
+    fi
+    if [ $OUTRES -eq 0 ]; then
+        echo "     FODT output file OK"
+    fi
 else
     echo "Failed"
     if [ $LOGRES -gt 0 ]; then
