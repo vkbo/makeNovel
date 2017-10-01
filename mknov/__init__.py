@@ -13,7 +13,7 @@ Created: 2017-09-22 [0.1.0]
 import logging
 import getopt
 
-from os         import path
+from os         import path, remove, rename
 from textwrap   import dedent
 
 from .make import MakeNovel
@@ -59,11 +59,14 @@ logger = logging.getLogger(__name__)
 def main(sysArgs):
     
     # Valid Input Options
-    shortOpt = "i:hd:v"
+    shortOpt = "i:f:hd:ql:v"
     longOpt  = [
         "infile=",
+        "format=",
         "help",
         "debug=",
+        "quiet",
+        "logfile=",
         "version",
     ]
     
@@ -73,8 +76,11 @@ def main(sysArgs):
         
         Usage:
         -i, --infile   Input file.
+        -f, --format   Output format. Valid options are FODT, TXT, HTM.
         -h, --help     Print this message.
         -d, --debug    Debug level. Valid options are DEBUG, INFO, WARN or ERROR.
+        -q, --quiet    Disable output to command line.
+        -l, --logfile  Log file.
         -v, --version  Print program version and exit.
         """ % (__version__,__copyright__)
     )
@@ -83,6 +89,10 @@ def main(sysArgs):
     debugLevel = logging.INFO
     debugStr   = "{levelname:8s}  {message}"
     inputFile  = ""
+    outFormat  = "FODT"
+    logFile    = ""
+    toFile     = False
+    toStd      = True
     
     if len(sysArgs) == 0:
         print(helpMsg)
@@ -98,6 +108,8 @@ def main(sysArgs):
     for inOpt, inArg in inOpts:
         if inOpt in ("-i","--infile"):
             inputFile = inArg
+        if inOpt in ("-f","--format"):
+            outFormat = inArg.upper()
         elif   inOpt in ("-h","--help"):
             print(helpMsg)
             exit()
@@ -117,6 +129,11 @@ def main(sysArgs):
             else:
                 print("Invalid debug level")
                 exit(2)
+        elif inOpt in ("-l","--logfile"):
+            logFile = inArg
+            toFile  = True
+        elif inOpt in ("-q","--quiet"):
+            toStd = False
         elif inOpt in ("-v", "--version"):
             print("makeNovel %s Version %s" % (__status__,__version__))
             exit()
@@ -125,15 +142,26 @@ def main(sysArgs):
     logFmt  = logging.Formatter(fmt=debugStr,datefmt="%Y-%m-%d %H:%M:%S",style="{")
     cHandle = logging.StreamHandler()
     
-    cHandle.setLevel(debugLevel)
-    cHandle.setFormatter(logFmt)
-    
-    logger.setLevel(debugLevel)
-    logger.addHandler(cHandle)
-    
+    if not logFile == "" and toFile:
+        if path.isfile(logFile+".bak"):
+            remove(logFile+".bak")
+        if path.isfile(logFile):
+            rename(logFile,logFile+".bak")
+        
+        fHandle = logging.FileHandler(logFile)
+        fHandle.setLevel(debugLevel)
+        fHandle.setFormatter(logFmt)
+        logger.addHandler(fHandle)
+
+    if toStd:
+        cHandle = logging.StreamHandler()
+        cHandle.setLevel(debugLevel)
+        cHandle.setFormatter(logFmt)
+        logger.addHandler(cHandle)
+
     if path.isfile(inputFile):
         MN = MakeNovel(inputFile)
-        MN.buildBook()
+        MN.buildBook(outFormat)
     else:
         logger.error("File not found: %s" % inputFile)
     

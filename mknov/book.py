@@ -209,4 +209,12 @@ class Book():
         
         return True
 
+    def buildTXT(self):
+        logger.error("TXT output not implemented yet.")
+        return False
+
+    def buildHTM(self):
+        logger.error("HTM output not implemented yet.")
+        return False
+
 # End Class Book

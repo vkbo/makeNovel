@@ -120,7 +120,7 @@ class MakeNovel():
 
         return
         
-    def buildBook(self):
+    def buildBook(self, outFormat):
         
         for n in range(len(self.cmdStack)):
 
@@ -174,7 +174,14 @@ class MakeNovel():
                 logger.error("Unexpected build error")
         
         # Build Target
-        self.theBook.buildFODT()
+        if outFormat == "FODT":
+            self.theBook.buildFODT()
+        elif outFormat == "TXT":
+            self.theBook.buildTXT()
+        elif outFormat == "HTM":
+            self.theBook.buildTXT()
+        else:
+            logger.error("Unknown output format %s" % outFormat)
         
         return
 
