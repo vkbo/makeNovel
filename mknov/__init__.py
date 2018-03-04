@@ -6,24 +6,21 @@ makeNovel – Init
 Application initialisation
 
 File History:
-Created: 2017-09-22 [0.1.0]
+Created:   2017-09-22 [0.1.0]
+Rewritten: 2018-03-04 [0.1.0] Split up into sub commands
 
 """
 
 import logging
-import getopt
 
-from os         import path, remove, rename
-from textwrap   import dedent
-
-from .make import MakeNovel
+from os import path, remove, rename
 
 __author__     = "Veronica Berglyd Olsen"
 __copyright__  = "Copyright 2017, Veronica Berglyd Olsen"
 __credits__    = ["Veronica Berglyd Olsen"]
 __license__    = "GPLv3"
 __version__    = "0.1.0"
-__date__       = "2017"
+__date__       = "2018"
 __maintainer__ = "Veronica Berglyd Olsen"
 __email__      = "code@vkbo.net"
 __status__     = "Development"
@@ -58,112 +55,100 @@ logger = logging.getLogger(__name__)
 
 def main(sysArgs):
     
-    # Valid Input Options
-    shortOpt = "i:f:hd:ql:v"
-    longOpt  = [
-        "infile=",
-        "format=",
-        "help",
-        "debug=",
-        "quiet",
-        "logfile=",
-        "version",
+    inArgs = [
     ]
     
-    helpMsg = dedent("""
-        makeNovel v%s
-        %s
-        
-        Usage:
-        -i, --infile   Input file.
-        -f, --format   Output format. Valid options are FODT, TXT, HTM.
-        -h, --help     Print this message.
-        -d, --debug    Debug level. Valid options are DEBUG, INFO, WARN or ERROR.
-        -q, --quiet    Disable output to command line.
-        -l, --logfile  Log file.
-        -v, --version  Print program version and exit.
-        """ % (__version__,__copyright__)
+    helpMsg = (
+        "mknovel {version} ({status})\n"
+        "{copyright}\n"
+        "\n"
+        "List of Commands:\n"
+        "  init      Sets up a new project.\n"
+        "  make      Make the novel file tree into various output formats.\n"
+        "  build     Build various outputs like story timeline, etc.\n"
+        "  analyse   Prints a list of statistics like word count, etc.\n"
+        "  config    Set various configuration options.\n"
+        "  backup    Create a backup of the novel project.\n"
+        "  version   Print program version.\n"
+        "  help      Print this help message, or for any of the above commands.\n"
+        "\n"
+        "For more details on each command, type mknovel help [command]."
+    ).format(
+        version   = __version__,
+        status    = __status__,
+        copyright = __copyright__
     )
     
-    # Defaults
-    debugLevel = logging.INFO
-    debugStr   = "{levelname:8s}  {message}"
-    inputFile  = ""
-    outFormat  = "FODT"
-    logFile    = ""
-    toFile     = False
-    toStd      = True
+    # # Defaults
+    # debugLevel = logging.INFO
+    # debugStr   = "{levelname:8s}  {message}"
+    # inputFile  = ""
+    # outFormat  = "FODT"
+    # logFile    = ""
+    # toFile     = False
+    # toStd      = True
     
     if len(sysArgs) == 0:
         print(helpMsg)
         exit(2)
     
-    # Parse Options
-    try:
-        inOpts, inArgs = getopt.getopt(sysArgs,shortOpt,longOpt)
-    except getopt.GetoptError:
+    theCmd  = sysArgs[0]  # The command called
+    theArgs = sysArgs[1:] # The args to pass on to the command class
+    
+    if theCmd == "init":
+        print("Command not implemented yet")
+        exit(0)
+    elif theCmd == "make":
+        print("Command not implemented yet")
+        exit(0)
+    elif theCmd == "build":
+        print("Command not implemented yet")
+        exit(0)
+    elif theCmd == "analyse":
+        print("Command not implemented yet")
+        exit(0)
+    elif theCmd == "config":
+        print("Command not implemented yet")
+        exit(0)
+    elif theCmd == "backup":
+        print("Command not implemented yet")
+        exit(0)
+    elif theCmd == "version":
+        print("mknovel {version} ({status})".format(version = __version__, status = __status__))
+        exit(0)
+    elif theCmd == "help":
+        print(helpMsg)
+        exit(2)
+    else:
         print(helpMsg)
         exit(2)
     
-    for inOpt, inArg in inOpts:
-        if inOpt in ("-i","--infile"):
-            inputFile = inArg
-        if inOpt in ("-f","--format"):
-            outFormat = inArg.upper()
-        elif   inOpt in ("-h","--help"):
-            print(helpMsg)
-            exit()
-        elif inOpt in ("-d", "--debug"):
-            if   inArg == "ERROR":
-                debugLevel = logging.ERROR
-                debugStr   = "{levelname:8s}  {message}"
-            elif inArg == "WARN":
-                debugLevel = logging.WARN
-                debugStr   = "{levelname:8s}  {message}"
-            elif inArg == "INFO":
-                debugLevel = logging.INFO
-                debugStr   = "{levelname:8s}  {message}"
-            elif inArg == "DEBUG":
-                debugLevel = logging.DEBUG
-                debugStr   = "[{name:12s}:{lineno:4d}] {levelname:8s}  {message}"
-            else:
-                print("Invalid debug level")
-                exit(2)
-        elif inOpt in ("-l","--logfile"):
-            logFile = inArg
-            toFile  = True
-        elif inOpt in ("-q","--quiet"):
-            toStd = False
-        elif inOpt in ("-v", "--version"):
-            print("makeNovel %s Version %s" % (__status__,__version__))
-            exit()
-    
     # Set Logging
-    logFmt  = logging.Formatter(fmt=debugStr,datefmt="%Y-%m-%d %H:%M:%S",style="{")
-    cHandle = logging.StreamHandler()
-    logger.setLevel(debugLevel)
+    # logFmt  = logging.Formatter(fmt=debugStr,datefmt="%Y-%m-%d %H:%M:%S",style="{")
+    # cHandle = logging.StreamHandler()
+    # logger.setLevel(debugLevel)
     
-    if not logFile == "" and toFile:
-        if path.isfile(logFile+".bak"):
-            remove(logFile+".bak")
-        if path.isfile(logFile):
-            rename(logFile,logFile+".bak")
+    # if not logFile == "" and toFile:
+    #     if path.isfile(logFile+".bak"):
+    #         remove(logFile+".bak")
+    #     if path.isfile(logFile):
+    #         rename(logFile,logFile+".bak")
         
-        fHandle = logging.FileHandler(logFile)
-        fHandle.setLevel(debugLevel)
-        fHandle.setFormatter(logFmt)
-        logger.addHandler(fHandle)
+    #     fHandle = logging.FileHandler(logFile)
+    #     fHandle.setLevel(debugLevel)
+    #     fHandle.setFormatter(logFmt)
+    #     logger.addHandler(fHandle)
 
-    if toStd:
-        cHandle = logging.StreamHandler()
-        cHandle.setLevel(debugLevel)
-        cHandle.setFormatter(logFmt)
-        logger.addHandler(cHandle)
+    # if toStd:
+    #     cHandle = logging.StreamHandler()
+    #     cHandle.setLevel(debugLevel)
+    #     cHandle.setFormatter(logFmt)
+    #     logger.addHandler(cHandle)
 
-    if path.isfile(inputFile):
-        MN = MakeNovel(inputFile)
-        MN.buildBook(outFormat)
-    else:
-        logger.error("File not found: %s" % inputFile)
+    # if path.isfile(inputFile):
+    #     MN = MakeNovel(inputFile)
+    #     MN.buildBook(outFormat)
+    # else:
+    #     logger.error("File not found: %s" % inputFile)
     
     return
