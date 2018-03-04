@@ -15,6 +15,9 @@ import logging
 
 from os import path, remove, rename
 
+from .config import Config
+from .output import Output
+
 __author__     = "Veronica Berglyd Olsen"
 __copyright__  = "Copyright 2017, Veronica Berglyd Olsen"
 __credits__    = ["Veronica Berglyd Olsen"]
@@ -26,28 +29,11 @@ __email__      = "code@vkbo.net"
 __status__     = "Development"
 __url__        = "https://github.com/vkbo/makeNovel"
 
-#
-# Set up logging
-#
-
-# Add custom loglevel
-INPUT = 60
-BUILD = 70
-logging.addLevelName(INPUT,"INPUT")
-logging.addLevelName(BUILD,"BUILD")
-
-def logInput(self, message, *args, **kws):
-    if self.isEnabledFor(INPUT):
-        self._log(INPUT, message, args, **kws) 
-
-def logBuild(self, message, *args, **kws):
-    if self.isEnabledFor(BUILD):
-        self._log(BUILD, message, args, **kws) 
-
-logging.Logger.input = logInput
-logging.Logger.build = logBuild
-
+# Initiating logging
 logger = logging.getLogger(__name__)
+
+# Create config object
+OUT  = Output()
 
 #
 # Main program
@@ -55,8 +41,50 @@ logger = logging.getLogger(__name__)
 
 def main(sysArgs):
     
-    inArgs = [
-    ]
+    mnConf = Config()
+    if mnConf.findConfig():
+        pass
+    
+    #
+    # Logging
+    #
+    
+    # Defaults
+    debugLevel = logging.DEBUG
+    debugStr   = "%(levelname)-8s  %(message)s"
+    timeStr    = "[%(asctime)s] "
+    logFile    = ""
+    toFile     = False
+    toStd      = True
+    showTime   = False
+    
+    # Set Logging
+    if showTime:
+        debugStr = timeStr+debugStr
+    logFmt = logging.Formatter(fmt=debugStr,datefmt="%Y-%m-%d %H:%M:%S")
+    
+    if not logFile == "" and toFile:
+        if path.isfile(logFile+".bak"):
+            remove(logFile+".bak")
+        if path.isfile(logFile):
+            rename(logFile,logFile+".bak")
+        
+        fHandle = logging.FileHandler(logFile)
+        fHandle.setLevel(debugLevel)
+        fHandle.setFormatter(logFmt)
+        logger.addHandler(fHandle)
+    
+    if toStd:
+        cHandle = logging.StreamHandler()
+        cHandle.setLevel(debugLevel)
+        cHandle.setFormatter(logFmt)
+        logger.addHandler(cHandle)
+    
+    logger.setLevel(debugLevel)
+    
+    #
+    # Parse Iinput and Call Submodules
+    #
     
     helpMsg = (
         "mknovel {version} ({status})\n"
@@ -78,15 +106,6 @@ def main(sysArgs):
         status    = __status__,
         copyright = __copyright__
     )
-    
-    # # Defaults
-    # debugLevel = logging.INFO
-    # debugStr   = "{levelname:8s}  {message}"
-    # inputFile  = ""
-    # outFormat  = "FODT"
-    # logFile    = ""
-    # toFile     = False
-    # toStd      = True
     
     if len(sysArgs) == 0:
         print(helpMsg)
@@ -116,39 +135,8 @@ def main(sysArgs):
     elif theCmd == "version":
         print("mknovel {version} ({status})".format(version = __version__, status = __status__))
         exit(0)
-    elif theCmd == "help":
-        print(helpMsg)
-        exit(2)
     else:
         print(helpMsg)
         exit(2)
-    
-    # Set Logging
-    # logFmt  = logging.Formatter(fmt=debugStr,datefmt="%Y-%m-%d %H:%M:%S",style="{")
-    # cHandle = logging.StreamHandler()
-    # logger.setLevel(debugLevel)
-    
-    # if not logFile == "" and toFile:
-    #     if path.isfile(logFile+".bak"):
-    #         remove(logFile+".bak")
-    #     if path.isfile(logFile):
-    #         rename(logFile,logFile+".bak")
-        
-    #     fHandle = logging.FileHandler(logFile)
-    #     fHandle.setLevel(debugLevel)
-    #     fHandle.setFormatter(logFmt)
-    #     logger.addHandler(fHandle)
-
-    # if toStd:
-    #     cHandle = logging.StreamHandler()
-    #     cHandle.setLevel(debugLevel)
-    #     cHandle.setFormatter(logFmt)
-    #     logger.addHandler(cHandle)
-
-    # if path.isfile(inputFile):
-    #     MN = MakeNovel(inputFile)
-    #     MN.buildBook(outFormat)
-    # else:
-    #     logger.error("File not found: %s" % inputFile)
     
     return
