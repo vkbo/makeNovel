@@ -18,6 +18,8 @@ from os import path, remove, rename
 from .config import Config
 from .output import Output
 
+from .cmd_init import initProject
+
 __author__     = "Veronica Berglyd Olsen"
 __copyright__  = "Copyright 2017, Veronica Berglyd Olsen"
 __credits__    = ["Veronica Berglyd Olsen"]
@@ -41,10 +43,6 @@ OUT  = Output()
 
 def main(sysArgs):
     
-    mnConf = Config()
-    if mnConf.findConfig():
-        pass
-    
     #
     # Logging
     #
@@ -58,6 +56,11 @@ def main(sysArgs):
     toStd      = True
     showTime   = False
     
+    # Read logging settings
+    mnConf = Config()
+    if mnConf.findConfig():
+        pass
+        
     # Set Logging
     if showTime:
         debugStr = timeStr+debugStr
@@ -115,8 +118,7 @@ def main(sysArgs):
     theArgs = sysArgs[1:] # The args to pass on to the command class
     
     if theCmd == "init":
-        print("Command not implemented yet")
-        exit(0)
+        initProject(theArgs)
     elif theCmd == "make":
         print("Command not implemented yet")
         exit(0)
