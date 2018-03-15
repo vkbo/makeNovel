@@ -19,6 +19,7 @@ from .config import Config
 from .output import Output
 
 from .cmd_init import initProject
+from .cmd_make import makeProject
 
 __author__     = "Veronica Berglyd Olsen"
 __copyright__  = "Copyright 2017, Veronica Berglyd Olsen"
@@ -118,27 +119,26 @@ def main(sysArgs):
     theArgs = sysArgs[1:] # The args to pass on to the command class
     
     if theCmd == "init":
-        initProject(theArgs)
+        return initProject(theArgs)
     elif theCmd == "make":
-        print("Command not implemented yet")
-        exit(0)
+        return makeProject(theArgs)
     elif theCmd == "build":
         print("Command not implemented yet")
-        exit(0)
+        return True
     elif theCmd == "analyse":
         print("Command not implemented yet")
-        exit(0)
+        return True
     elif theCmd == "config":
         print("Command not implemented yet")
-        exit(0)
+        return True
     elif theCmd == "backup":
         print("Command not implemented yet")
-        exit(0)
+        return True
     elif theCmd == "version":
         print("mknovel {version} ({status})".format(version = __version__, status = __status__))
-        exit(0)
+        return True
     else:
         print(helpMsg)
-        exit(2)
+        return True
     
-    return
+    return False

@@ -1,0 +1,21 @@
+# This is a test novel
+
+@master
+
+@set title: "Test Novel"
+@set author: "Jane Smith"
+
+@define charMain = "Main Character"
+@add character: "Sam" "Samantha Jones" "Main"
+
+@add chapter: "Chapter One" 123 2.5 "Something"
+
+@include "something"
+
+@content
+
+@set compile: true
+
+This is some text content with numbers like 123 in it. $ssss -
+
+"Oh, really?" she said in **strong** and _emphasis_ font.
