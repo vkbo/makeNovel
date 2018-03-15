@@ -16,27 +16,29 @@ import mknov   as mn
 from os import path, getcwd, pardir
 
 from mknov.config import Config
+from mknov.book   import Book
 
 logger = logging.getLogger(__name__)
 
 def buildProject(sysArgs):
     
-    logger.info("Running build project")
-    
     # Valid Input Options
-    shortOpt = "hft"
+    shortOpt = "hm:at"
     longOpt  = [
         "help",
-        "full",
+        "master=",
+        "all",
         "timeline",
     ]
     
     helpMsg = (
-        "novelWriter Build Module\n"
+        "makenovel {version} build\n"
         "\n"
         "Usage:\n"
         " -h, --help      Print this message.\n"
-        " -f, --full      Build all items.\n"
+        " -m, --master=   Specify the master document. If none is specified,\n"
+        "                   the previously used file will be used.\n"
+        " -a, --all       Build all items.\n"
         " -t, --timeline  Build novel timeline.\n"
     ).format(
         version   = mn.__version__,
@@ -47,12 +49,41 @@ def buildProject(sysArgs):
     # Check config
     mnConf = Config()
     
+    # Default Values
+    masterFile    = "Unknown"
+    buildTimeLine = False
+    
+    # Parse Options
+    try:
+        inOpts, inArgs = getopt.getopt(sysArgs,shortOpt,longOpt)
+    except getopt.GetoptError:
+        print(helpMsg)
+        exit(2)
+    
     # Parse Input
     for inOpt, inArg in inOpts:
         if inOpt in ("-h","--help"):
             print(helpMsg)
             return True
-        elif inOpt in ("-o","--output"):
+        elif inOpt in ("-m","--master"):
+            masterFile = inArg
+        elif inOpt in ("-f","--full"):
             pass
+    
+    #
+    # Execute Build
+    #
+    
+    # Command Header
+    mn.OUT.printHeader("This is %s build - version %s" % (
+        mn.__appname__,mn.__version__), 72
+    )
+    
+    # Echo Settings
+    mn.OUT.infMsg("Master file: %s" % masterFile)
+    
+    theBook = Book(masterFile)
+    
+    mn.OUT.infMsg("")
     
     return False

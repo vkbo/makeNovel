@@ -20,10 +20,30 @@ class Output():
         
         return
     
-    def printMsg(self, msgString):
-        
+    def printHeader(self, headString, headLen=72):
+        strLen = len(headString)
+        strInd = round((headLen-strLen)/2)
+        print("")
+        print("*"*headLen)
+        print(" "*strInd + headString)
+        print("*"*headLen)
+        print("")
+        return True
+    
+    def infMsg(self, msgString):
         print(msgString)
+        return True
+    
+    def errMsg(self, msgString):
+        print("Error: %s" % msgString)
+        return True
+    
+    def wrnMsg(self, msgString):
+        print("Warning: %s" % msgString)
+        return True
         
+    def dbgMsg(self, msgString):
+        print("Debug: %s" % msgString)
         return True
     
 # End Class Output

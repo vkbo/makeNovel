@@ -18,9 +18,11 @@ from os import path, remove, rename
 from .config import Config
 from .output import Output
 
-from .cmd_init import initProject
-from .cmd_make import makeProject
+from .cmd_init  import initProject
+from .cmd_make  import makeProject
+from .cmd_build import buildProject
 
+__appname__    = "makenovel"
 __author__     = "Veronica Berglyd Olsen"
 __copyright__  = "Copyright 2017, Veronica Berglyd Olsen"
 __credits__    = ["Veronica Berglyd Olsen"]
@@ -36,7 +38,7 @@ __url__        = "https://github.com/vkbo/makeNovel"
 logger = logging.getLogger(__name__)
 
 # Create config object
-OUT  = Output()
+OUT = Output()
 
 #
 # Main program
@@ -91,7 +93,7 @@ def main(sysArgs):
     #
     
     helpMsg = (
-        "mknovel {version} ({status})\n"
+        "makenovel {version} ({status})\n"
         "{copyright}\n"
         "\n"
         "List of Commands:\n"
@@ -104,7 +106,7 @@ def main(sysArgs):
         "  version   Print program version.\n"
         "  help      Print this help message, or for any of the above commands.\n"
         "\n"
-        "For more details on each command, type mknovel help [command]."
+        "For more details on each command, type makenovel help [command]."
     ).format(
         version   = __version__,
         status    = __status__,
@@ -113,7 +115,7 @@ def main(sysArgs):
     
     if len(sysArgs) == 0:
         print(helpMsg)
-        exit(2)
+        return True
     
     theCmd  = sysArgs[0]  # The command called
     theArgs = sysArgs[1:] # The args to pass on to the command class
@@ -123,8 +125,7 @@ def main(sysArgs):
     elif theCmd == "make":
         return makeProject(theArgs)
     elif theCmd == "build":
-        print("Command not implemented yet")
-        return True
+        return buildProject(theArgs)
     elif theCmd == "analyse":
         print("Command not implemented yet")
         return True
