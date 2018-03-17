@@ -22,7 +22,7 @@ from .cmd_init  import initProject
 from .cmd_make  import makeProject
 from .cmd_build import buildProject
 
-__appname__    = "makenovel"
+__appname__    = "makeNovel"
 __author__     = "Veronica Berglyd Olsen"
 __copyright__  = "Copyright 2017, Veronica Berglyd Olsen"
 __credits__    = ["Veronica Berglyd Olsen"]
@@ -93,7 +93,7 @@ def main(sysArgs):
     #
     
     helpMsg = (
-        "makenovel {version} ({status})\n"
+        "{appname} {version} ({status})\n"
         "{copyright}\n"
         "\n"
         "List of Commands:\n"
@@ -108,6 +108,7 @@ def main(sysArgs):
         "\n"
         "For more details on each command, type makenovel help [command]."
     ).format(
+        appname   = __appname__,
         version   = __version__,
         status    = __status__,
         copyright = __copyright__

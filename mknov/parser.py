@@ -22,7 +22,7 @@ class Parser():
     def __init__(self, inputFile):
         
         if not path.isfile(inputFile):
-            mn.OUT.errMsg("File not found %s " % inputFile, 2)
+            mn.OUT.errMsg("File not found %s " % inputFile)
         
         self.inFile    = inputFile
         self.inPath    = ""

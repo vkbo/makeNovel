@@ -1,21 +1,23 @@
-# This is a test novel
+#
+#  This is a test novel
+#
 
 @master
 
-@set title: "Test Novel"
-@set author: "Jane Smith"
+@set book.title:  "Test Novel"
+@set book.author: "Jane Smith"
 
-@define charMain = "Main Character"
-@add character: "Sam" "Samantha Jones" "Main"
+@add character: "Sam"
+    @set character.name:   "Samantha Jones"
+    @set character.status: "Main"
 
-@add chapter: "Chapter One" 123 2.5 "Something"
+@add chapter: "Prologue" False
+    @add scene: "pre-one"
+    @add scene: "pre-two"
 
-@include "something"
+@add chapter: "Chapter One" True
+    @add scene: "scene-one"
+    @add scene: "scene-two"
 
-@content
-
-@set compile: true
-
-This is some text content with numbers like 123 in it. $ssss -
-
-"Oh, really?" she said in **strong** and _emphasis_ font.
+@add chapter: "Chapter Three" True
+    @add scene: "scene-three"
