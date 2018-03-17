@@ -29,6 +29,14 @@ class Parser():
     TYP_FLOAT = 3
     TYP_BOOL  = 4
     
+    REV_TYPE  = [
+        "none",
+        "string",
+        "integer",
+        "float",
+        "boolean"
+    ]
+    
     def __init__(self, inputFile):
         
         if not path.isfile(inputFile):
@@ -111,6 +119,7 @@ class Parser():
             elif theData[0] == "\"" or theData[0] == "\'":
                 if len(theData) >= 2:
                     if theData[0] == theData[-1]:
+                        theType = self.TYP_STR
                         theData = theData[1:-1]
                     else:
                         theData = ""
@@ -135,8 +144,9 @@ class Parser():
                 ))
         
         theReturn = {
-            "command" : theCommand.strip(),
-            "target"  : theTarget.strip(),
+            "line"    : self.rawLineNo[rawIndex],
+            "command" : theCommand.strip().lower(),
+            "target"  : theTarget.strip().lower(),
             "data"    : theData,
             "type"    : theType
         }
