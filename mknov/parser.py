@@ -122,24 +122,42 @@ class Parser():
                     mn.OUT.errMsg("Unknown data entry on line %d in file: %s" % (
                         self.rawLineNo[rawIndex], self.inFile
                     ))
+            elif self.isInt(theData):
+                theType = self.TYP_INT
+                theData = int(theData)
+            elif self.isFloat(theData):
+                theType = self.TYP_FLOAT
+                theData = float(theData)
             else:
-                try:
-                    theData = int(theData)
-                    theType = self.TYP_INT
-                except:
-                    theData = ""
-                    mn.OUT.errMsg("Unknown data entry on line %d in file: %s" % (
-                        self.rawLineNo[rawIndex], self.inFile
-                    ))
+                theData = ""
+                mn.OUT.errMsg("Unknown data entry on line %d in file: %s" % (
+                    self.rawLineNo[rawIndex], self.inFile
+                ))
         
         theReturn = {
             "command" : theCommand.strip(),
             "target"  : theTarget.strip(),
-            "data"    : theData
+            "data"    : theData,
+            "type"    : theType
         }
         
         return theReturn
-        
-        
+    
+    def isFloat(self, testVal):
+        try:
+            intVal = float(testVal)
+        except ValueError:
+            return False
+        else:
+            return True
+
+    def isInt(self, testVal):
+        try:
+            floatVal = float(testVal)
+            intVal   = int(testVal)
+        except ValueError:
+            return False
+        else:
+            return floatVal == intVal
     
 # End Class Parser
