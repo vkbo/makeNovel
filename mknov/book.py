@@ -27,12 +27,27 @@ class Book():
     
     def __init__(self, masterFile):
         
+        self.bookTitle    = ""
+        self.bookAuthor   = []
+        self.bookStatus   = ""
+        self.bookChapters = []
+        
         if not path.isfile(masterFile):
             mn.OUT.errMsg("File not found: %s" % masterFile)
         
         self.masterFile = masterFile
+        self.theMaster  = Parser(masterFile)
         
-        self.theParser = Parser(masterFile)
+        return
+    
+    def buildTree(self, metaOnly=False):
+        
+        for rawIndex in range(self.theMaster.getLines()):
+            lineType = self.theMaster.getType(rawIndex)
+            
+            if lineType == Parser.LN_CMD:
+                cmdData = self.theMaster.splitCommand(rawIndex)
+                print("'{command}' '{target}' '{data}'".format(**cmdData))
         
         return
 

@@ -6,18 +6,21 @@
 
 @set book.title:  "Test Novel"
 @set book.author: "Jane Smith"
+@set book.status: "First Draft"
 
 @add character: "Sam"
-    @set character.name:   "Samantha Jones"
-    @set character.status: "Main"
+    @set character.name:       "Samantha Jones"
+    @set character.status:     "Main"
+    @set character.importance: 10
 
-@add chapter: "Prologue" False
+@add prologue: "Prologue"
     @add scene: "pre-one"
     @add scene: "pre-two"
 
-@add chapter: "Chapter One" True
+@add chapter: "Chapter One"
     @add scene: "scene-one"
     @add scene: "scene-two"
 
-@add chapter: "Chapter Three" True
+@add chapter: "Chapter Three"
     @add scene: "scene-three"
+    @add scene: ""

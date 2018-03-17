@@ -83,6 +83,7 @@ def buildProject(sysArgs):
     mn.OUT.infMsg("Master file: %s" % masterFile)
     
     theBook = Book(masterFile)
+    theBook.buildTree()
     
     mn.OUT.infMsg("")
     
