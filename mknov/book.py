@@ -14,6 +14,7 @@ import mknov as mn
 
 from os         import path
 
+from .error     import ErrHandler, ErrCodes
 from .parser    import Parser
 from .chapter   import Chapter
 from .scene     import Scene
@@ -31,6 +32,7 @@ class Book():
         
         self.masterFile     = masterFile
         self.theMaster      = Parser(masterFile)
+        self.isMaster       = False
         
         # Book Meta
         self.bookTitle      = ""
@@ -63,12 +65,18 @@ class Book():
             return False
         
         for theCmd in self.cmdStack:
-            print("'{command}' '{target}' '{data}' '{type}'".format(**theCmd))
+            # print("'{command}' '{target}' '{data}' '{type}'".format(**theCmd))
+            
+            #
+            # Master
+            #
+            if theCmd["command"] == "@master":
+                self.isMaster = True
             
             #
             # ADD Command
             #
-            if theCmd["command"] == "@add":
+            elif theCmd["command"] == "@add":
                 
                 # Add New Character
                 if theCmd["target"] == "character":
@@ -92,7 +100,19 @@ class Book():
                 
                 # Add New Scene
                 elif theCmd["target"] == "scene":
-                    pass
+                    if self.hasChapter(theCmd):
+                        newFile  = self.validData(theCmd,Parser.TYP_STR)
+                        newScene = Scene(newFile)
+                        self.bookScenes.append(newScene)
+                        newIndex = len(self.bookScenes) - 1
+                        self.bookChapters[self.currChapter].addScene(newIndex)
+                        mn.OUT.infMsg("   > Added scene file: %s" % newFile)
+                
+                # If Reached, Error
+                else:
+                    mn.OUT.errMsg("{raw}".format(**theCmd))
+                    mn.OUT.errMsg("Unknown command target \"{target}\"".format(**theCmd))
+                    ErrHandler.terminateExec(ErrCodes.ERR_COMMAND)
             
             #
             # SET Command
@@ -110,6 +130,34 @@ class Book():
                 elif theCmd["target"] == "book.status":
                     self.bookStatus = self.validData(theCmd,Parser.TYP_STR)
                     mn.OUT.infMsg(" > Book status set to: %s" % self.bookStatus)
+                
+                # Character Meta
+                elif theCmd["target"] == "character.name":
+                    if self.hasCharacter(theCmd):
+                        self.bookCharacters[self.currCharacter].setName(theCmd)
+                        mn.OUT.infMsg("   > Set character name to: \"{data}\"".format(**theCmd))
+                elif theCmd["target"] == "character.status":
+                    if self.hasCharacter(theCmd):
+                        self.bookCharacters[self.currCharacter].setStatus(theCmd)
+                        mn.OUT.infMsg("   > Set character status to: \"{data}\"".format(**theCmd))
+                elif theCmd["target"] == "character.importance":
+                    if self.hasCharacter(theCmd):
+                        self.bookCharacters[self.currCharacter].setImportance(theCmd)
+                        mn.OUT.infMsg("   > Set character importance to: \"{data}\"".format(**theCmd))
+        
+                # If Reached, Error
+                else:
+                    mn.OUT.errMsg("{raw}".format(**theCmd))
+                    mn.OUT.errMsg("Unknown command target \"{target}\"".format(**theCmd))
+                    ErrHandler.terminateExec(ErrCodes.ERR_COMMAND)
+            
+            #
+            # Unknown Command
+            #
+            else:
+                mn.OUT.errMsg("{raw}".format(**theCmd))
+                mn.OUT.errMsg("Unknown command \"{command}\"".format(**theCmd))
+                ErrHandler.terminateExec(ErrCodes.ERR_COMMAND)
         
         return
         
@@ -126,16 +174,36 @@ class Book():
         
         return
     
-    def validData(self,theCmd,theType):
+    def validData(self, theCmd, theType):
+        
         if theCmd["type"] == theType:
             return theCmd["data"]
-            
+        
+        mn.OUT.errMsg("{raw}".format(**theCmd))
         mn.OUT.errMsg("Wrong data type %s for book.title, expected %s on line %d in file: %s" % (
             Parser.REV_TYPE[theCmd["type"]],
             Parser.REV_TYPE[theType],
             theCmd["line"],
             self.theMaster.inFile
         ))
+        ErrHandler.terminateExec(ErrCodes.ERR_DATATYPE)
+        
         return ""
-
+    
+    def hasCharacter(self, theCmd):
+        if self.currCharacter is None:
+            mn.OUT.errMsg("{raw}".format(**theCmd))
+            mn.OUT.errMsg("No character has been added yet.")
+            ErrHandler.terminateExec(ErrCodes.ERR_SETBFADD)
+            return False
+        return True
+    
+    def hasChapter(self, theCmd):
+        if self.currChapter is None:
+            mn.OUT.errMsg("{raw}".format(**theCmd))
+            mn.OUT.errMsg("No chapter has been added yet.")
+            ErrHandler.terminateExec(ErrCodes.ERR_SETBFADD)
+            return False
+        return True
+    
 # End Class Book

@@ -23,4 +23,3 @@
 
 @add chapter: "Chapter Three"
     @add scene: "scene-three"
-    @add scene: ""

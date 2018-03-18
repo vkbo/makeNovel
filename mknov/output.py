@@ -46,4 +46,17 @@ class Output():
         print("Debug: %s" % msgString)
         return True
     
+    def critMsg(self, msgString, actionString):
+        strLen = len(msgString)
+        if strLen < 14:
+            strLen = 14
+        print("")
+        print("*"*(strLen+6))
+        print("*  Critical Error"+(" "*(strLen-14))+"  *")
+        print("* ="+("="*strLen)+"= *")
+        print("*  %s  *" % msgString)
+        print("*"*(strLen+6))
+        print(actionString)
+        print("")
+    
 # End Class Output

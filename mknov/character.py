@@ -18,10 +18,21 @@ class Character():
         
         self.charID         = chID
         self.charName       = ""
-        self.charNick       = ""
         self.charStatus     = ""
         self.charImportance = 0
         
         return
+    
+    def setName(self, theCmd):
+        self.charName = theCmd["data"]
+        return True
+    
+    def setStatus(self, theCmd):
+        self.charStatus = theCmd["data"]
+        return True
+    
+    def setImportance(self, theCmd):
+        self.charImportance = theCmd["data"]
+        return True
     
 # End Class Character

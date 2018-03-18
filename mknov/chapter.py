@@ -45,7 +45,12 @@ class Chapter():
         self.chapterType    = chType
         self.chapterCompile = True
         self.chapterNumber  = None
+        self.chapterScenes  = []
         
         return
+    
+    def addScene(self, sceneIndex):
+        self.chapterScenes.append(sceneIndex)
+        return True
     
 # End Class Chapter

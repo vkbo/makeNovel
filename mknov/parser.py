@@ -142,6 +142,7 @@ class Parser():
         
         theReturn = {
             "line"    : self.rawLineNo[rawIndex],
+            "raw"     : self.rawBuffer[rawIndex],
             "command" : theCommand.strip().lower(),
             "target"  : theTarget.strip().lower(),
             "data"    : theData,
