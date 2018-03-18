@@ -10,12 +10,9 @@ Created: 2018-03-15 [0.1.0]
 
 """
 
-import logging
-import mknov   as mn
+import mknov as mn
 
 from os import path
-
-logger = logging.getLogger(__name__)
 
 class Parser():
     

@@ -10,38 +10,43 @@ Created: 2018-03-15 [0.1.0]
 
 """
 
-import logging
-import mknov   as mn
+import mknov as mn
 
-from os import path
+from os         import path
 
-from .parser import Parser
-
-logger = logging.getLogger(__name__)
+from .parser    import Parser
+from .chapter   import Chapter
+from .scene     import Scene
+from .character import Character
 
 class Book():
     
     theParser  = None
-    
     masterFile = None
     
     def __init__(self, masterFile):
         
-        self.bookTitle    = ""
-        self.bookAuthor   = []
-        self.bookStatus   = ""
-        
-        self.bookChapters = []
-        self.bookScenes   = []
-        self.bookChars    = []
-        
-        self.cmdStack     = []
-        
         if not path.isfile(masterFile):
             mn.OUT.errMsg("File not found: %s" % masterFile)
         
-        self.masterFile = masterFile
-        self.theMaster  = Parser(masterFile)
+        self.masterFile     = masterFile
+        self.theMaster      = Parser(masterFile)
+        
+        # Book Meta
+        self.bookTitle      = ""
+        self.bookAuthor     = []
+        self.bookStatus     = ""
+        
+        # Book Content
+        self.bookChapters   = []
+        self.bookScenes     = []
+        self.bookCharacters = []
+        
+        # Book Parsing Data
+        self.currChapter    = None
+        self.currCharacter  = None
+        
+        self.cmdStack       = []
         
         return
     
@@ -59,11 +64,42 @@ class Book():
         
         for theCmd in self.cmdStack:
             print("'{command}' '{target}' '{data}' '{type}'".format(**theCmd))
+            
+            #
+            # ADD Command
+            #
             if theCmd["command"] == "@add":
+                
+                # Add New Character
                 if theCmd["target"] == "character":
-                    newCharacter = self.validData(theCmd,Parser.TYP_STR)
-                    mn.OUT.infMsg(" > Added character: %s" % newCharacter)
+                    newID        = self.validData(theCmd,Parser.TYP_STR)
+                    newCharacter = Character(newID)
+                    self.bookCharacters.append(newCharacter)
+                    self.currCharacter = len(self.bookCharacters) - 1
+                    mn.OUT.infMsg(" > Added character: \"%s\"" % newID)
+                
+                # Add New Chapter
+                elif theCmd["target"] in Chapter.MAP_TYPE.keys():
+                    newTitle   = self.validData(theCmd,Parser.TYP_STR)
+                    newType    = Chapter.MAP_TYPE[theCmd["target"]]
+                    newChapter = Chapter(newTitle,newType)
+                    self.bookChapters.append(newChapter)
+                    self.currChapter = len(self.bookChapters) - 1
+                    mn.OUT.infMsg(" > Added %s with title \"%s\"" % (
+                        Chapter.REV_TYPE[newType],
+                        newTitle
+                    ))
+                
+                # Add New Scene
+                elif theCmd["target"] == "scene":
+                    pass
+            
+            #
+            # SET Command
+            #
             elif theCmd["command"] == "@set":
+                
+                # Book Meta
                 if theCmd["target"] == "book.title":
                     self.bookTitle = self.validData(theCmd,Parser.TYP_STR)
                     mn.OUT.infMsg(" > Book title set to: %s" % self.bookTitle)
