@@ -1,115 +1,96 @@
 ## makeNovel
 
-**Note:** This tool is under development.
+**Note:** This tool is under development. Not all of the features below have been implemented yet.
 
-This is a simple Python3 module that will compiles individual scene files into a novel in a single
-document. The structure of the final document is defined in a master file.
+makeNovel is a tool, written in Python3, to assist in writing novels. It is intended to be used with an extended markdown format designed to work with this tool.
+
+**Core Features**
+
+* Each scene of the novel is kept in a separate file in whatever folder structure you prefer.
+* The scene files can be written in whatever editor you wish to use, but they need to be saved as plain text files.
+* The position of the scene files within chapters is controlled with a master file.
+* The makeNovel tool will let you build HTML, PDF or OpenOffice document versions of the novel.
+* The makeNovel can generate scene-wise maps of all the meta data added to each scene. This is in fact one of the core features of makeNovel. This can for instance be used to generate and overview of which characters, objects or locations feature in each scene and chapter of the novel.
 
 ### Background
 
-There are many ways to write a novel from the technical side of things. I prefer to work on my
-projects by writing each scene as an individual file. However, having a folder with loads of smaller
-text documents can become messy when they need to be compiled into a full novel. This tool provides
-a way of setting up the layout in a master document in a text file.
+There are many ways to write a novel from the technical side of things. I prefer to work on my projects by writing each scene as an individual file. However, having a folder with loads of smaller text documents can become messy when they need to be compiled into a full novel. This tool provides a way of setting up the layout in a master document in a text file.
 
-The structure of the master file is simple. Set global parameters like book title and authors, add
-chapters, and scenes to each chapter. The scene files are easy to move around to where you want
-them, and you can add comments to the master document with the character `#`. I also plan to add
-different output formats to the tool. Initially plain text, html and fodt. The latter is a flat file
-format (flat odt) which is an open document standard. It works in OpenOffice and LibreOffice, and
-probably also in Microsoft Word.
+I've spent some time previously writing a GUI application for organising novels, but I end up spending more time coding than writing. Those projects are on hold while I write this tool. Writing GUI applications is a lot of work.
 
-I've spent some time previously writing a GUI application for organising novels, but I end up
-spending more time coding than writing. Maintaining a GUI application is also a lot of work. So I
-have more or less abandoned those projects.
+There are many novel writing programs out there. I find most of them too cluttered. Document editors do work fairly well, but I prefer even simpler tools. With this tool, you can use any editor you like, but as a programmer I prefer to use code (plain text) editors.
 
-There are many novel writing programs out there. I find most of them too cluttered. Document editors
-do work fairly well, but I prefer even simpler tools. The two main tools I use are:
+For planning the novel, I use a zim-wiki, an excellent note taking application also written in Python.
 
-* **Zim-wiki**: an excellent note taking tools written in Python. I already use it for work, and it
-   is also perfect for researching and drafting novel plots, characters, etc.
-* **FocusWriter**: an excellent no-distraction text editor with the minimum of features you need for
-   writing. I use it to write individual scene files.
+## Usage
 
-### Usage
+Functionality is still being implemented, here's an overview of what is in planned and partially implemented. Check back for progress.
 
-Only a bare minimum of functionality is implemented. But all the commands below work. At the moment
-`makeNovel` only works with fodt files. These can be written by FocusWriter, and opened in
-LibreOffice and OpenOffice (and perhaps Microsoft Word).
+### Input files
+
+The novel is divided up into a single master file, describing the project, and individual scene files with associated meta data. 
 
 #### Master File Format
 
-`makeNovel` takes a master layout file as its main input andparses it and generates a single
-document as output.
+`makeNovel` takes a master layout file as its main input. The keyword `@master` needs to be the first command in the file for it to be parsed as a master document.
 
-##### General Syntax
+#### Scene File Format
 
-The master document syntax is straight forward
+The scenes are contained in files where the first command is `@scene`. The files are then added to the master file with `@add` commands. See below.
 
-    VARIABLE = varValue
-    FUNCTION TARGET: inVal1; inVal2
+#### Command Overview
 
-Example:
+##### The `@add` Commands
 
-    # This is a comment
+Format: `@add [object]: [value]`
+
+Valid objects in `@master` files are:
+
+* `character` - Adds a new character to the novel (string). Value is the internal character ID of your choice.
+* `frontamtter` - Adds a new front matter section (string). Any scene file added here will be added to the front of the novel with no auto-generated headings or chapter numbers. Value is ignored.
+* `prologue` - Adds an un-numbered chapter to the front of the novel (string). Value is the title of the chapter.
+* `chapter` - Adds a numbered chapter to the novel (string). Value is the title of the chapter.
+* `epilogue` - Adds an un-numbered chapter to the end of the novel (string). Value is the title of the chapter.
+* `backmatter` - Adds a new back matter section (string). Any scene file added here will be added to the back of the novel with no auto-generated headings or chapter numbers. Value is ignored.
+
+valid only after an `@add frontmatter`, `prologue`, `chapter`, `epilogue` or `backmatter` command:
+
+* `scene` - Adds a scene file to the last chapter object (string). Value is the file name. If the extension of the file is `.nwf`, the extension can be omitted.
+
+##### The `@set` Commands
+
+Format: `@set [object.variable]: [value]`
+
+Valid objects and variables in `@master` files are:
+
+* `book.title` - The title of the novel (string).
+* `book.author` - The author of the novel (string). The command can be called multiple times to set more than one author.
+* `book.status` - The status of the novel project (string). I.e. "Draft One", etc.
+
+After an `@add character` command:
+
+* `character.name` - The full name of the character (string). Used for labels when generating charts.
+* `character.status` - The status of the character (string). Used for grouping when generating charts. Can be used to separate main characters from other characters, etc.
+* `character.importance` - Alternative way of grouping characters (float). Used for sorting characters when generating charts.
+
+After an `@add frontmatter`, `prologue`, `chapter`, `epilogue` or `backmatter` command:
+
+* `chapter.compile` - Whether to include the following scene files when compiling the document (boolean)
+
+### Runing makeNovel
+
+Format: `makeNovel [command] [options]`
+
+**Commands:**
+
+    init      Sets up a new project.
+    make      Make the novel file tree into various output formats.
+    build     Build various outputs like story timeline, etc.
+    analyse   Prints a list of statistics like word count, etc.
+    config    Set various configuration options.
+    backup    Create a backup of the novel project.
+    version   Print program version.
+    help      Print this help message, or for any of the above commands.
     
-    # Include another file
-    @INC header.in
+    For more details on each command, type makenovel help [command].
 
-    # Set default input format
-    SET FORMAT: txt
-    
-    SET TITLE:  Best Book Title Ever
-    SET AUTHOR: J. Smith
-    
-    ADD CHAPTER: Chapter One; Day 1
-        ADD SCENE: scene-001.txt
-        SEPARATOR
-        ADD SCENE: scene-002.txt
-
-##### All Commands
-
-###### SET Commands
-
-* `TITLE`: The book title
-* `FORMAT`: Assumed format of input files. Accepts txt and fodt. Will also support html.
-* `INPATH`: Root folder of scene files. This is where the script starts to look. If you organise
-   the files in folders under that, the relative path needs to be added to the `ADD SCENE` entry.
-* `SEPARATOR`: Sets the text used for separators inserted with the `SEPARATOR` command. Default
-   value is `***`.
-* `JUSTIFY`: Set to `ON`, `TRUE` or `1` to enable straight margins for paragraphs.
-
-###### ADD Commands
-
-* `AUTHOR`: Adds an author to the list of authors. Separate multiple authors with `;`. The command
-   can also be run multiple times to add authors.
-* `PROLOGUE`: Adds a prologue section to the novel. Title is an optional argument.
-* `CHAPTER`: Adds a chapter section to the novel. Each command increases the chapter number by one.
-   Title is an optional argument.
-* `EPILOGUE`: Adds an epilogue section to the novel. Title is an optional argument.
-* `SCENE`: Adds a scene to the most recently added prologue, chapter or epilogue. If a scene is
-   added before any of these have been defined, an error is reported.
-* `SEPTITLE`: Adds a separating title before the next scene.
-
-###### Other Commands
-
-* `BREAK`: Adds a blank paragraph. Can be used as a short break between scenes.
-* `SEPARATOR`: Adds a paragraph with the text defined by `SET SEPARATOR` between two scenes.
-
-#### Run makeNovel
-
-To compile the document, use:
-
-    makeNovel -i path/to/master-file.conf
-
-##### Full list of arguments:
-
-| Short | Long         | Description                                                      | Default |
-|-------|--------------|------------------------------------------------------------------|---------|
-| `-i`  | `--infile=`  | Input file that descripes the novel layout.                      | None    |
-| `-f`  | `--format=`  | Output file format. Valid inputs are FODT, TXT and HTM           | FODT    |
-| `-d`  | `--debug=`   | Chose debug level. Valid inputs are ERROR, WARN, INFO and DEBUG. | WARN    |
-| `-q`  | `--quiet`    | Disables output to command line.                                 |         |
-| `-l`  | `--logfile=` | Write parsing output to logfile.                                 |         |
-| `-h`  | `--help`     | Prints help text and exits.                                      |         |
-| `-v`  | `--version`  | Prints version and exits.                                        |         |
