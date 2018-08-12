@@ -19,6 +19,6 @@ def cleanUp():
     pathConfig = path.join(".mknov","config")
     if path.isfile(pathConfig):
         unlink(pathConfig)
-    
+
     if path.isdir(".mknov"):
         rmdir(".mknov")

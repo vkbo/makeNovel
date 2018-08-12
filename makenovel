@@ -7,9 +7,9 @@
 ##
 
 import sys
-import mknov as mn
+import mknov
 
 if __name__ == "__main__":
-    mn.main(sys.argv[1:])
+  mknov.main(sys.argv[1:])
 
 # End Main File

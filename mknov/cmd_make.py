@@ -20,16 +20,16 @@ from mknov.config import Config
 logger = logging.getLogger(__name__)
 
 def makeProject(sysArgs):
-    
+
     logger.info("Running make project")
-    
+
     # Valid Input Options
     shortOpt = "ho:"
     longOpt  = [
         "help",
         "output=",
     ]
-    
+
     helpMsg = (
         "novelWriter Make Module\n"
         "\n"
@@ -41,10 +41,10 @@ def makeProject(sysArgs):
         status    = mn.__status__,
         copyright = mn.__copyright__
     )
-    
+
     # Check config
     mnConf = Config()
-    
+
     # Parse Input
     for inOpt, inArg in inOpts:
         if inOpt in ("-h","--help"):
@@ -52,5 +52,5 @@ def makeProject(sysArgs):
             return True
         elif inOpt in ("-o","--output"):
             pass
-    
+
     return False

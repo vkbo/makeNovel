@@ -21,7 +21,7 @@ from mknov.book   import Book
 logger = logging.getLogger(__name__)
 
 def buildProject(sysArgs):
-    
+
     # Valid Input Options
     shortOpt = "hm:at"
     longOpt  = [
@@ -30,7 +30,7 @@ def buildProject(sysArgs):
         "all",
         "timeline",
     ]
-    
+
     helpMsg = (
         "makenovel {version} build\n"
         "\n"
@@ -45,21 +45,21 @@ def buildProject(sysArgs):
         status    = mn.__status__,
         copyright = mn.__copyright__
     )
-    
+
     # Check config
     mnConf = Config()
-    
+
     # Default Values
     masterFile    = "Unknown"
     buildTimeLine = False
-    
+
     # Parse Options
     try:
         inOpts, inArgs = getopt.getopt(sysArgs,shortOpt,longOpt)
     except getopt.GetoptError:
         print(helpMsg)
         exit(2)
-    
+
     # Parse Input
     for inOpt, inArg in inOpts:
         if inOpt in ("-h","--help"):
@@ -69,22 +69,22 @@ def buildProject(sysArgs):
             masterFile = inArg
         elif inOpt in ("-f","--full"):
             pass
-    
+
     #
     # Execute Build
     #
-    
+
     # Command Header
     mn.OUT.printHeader("This is %s build - version %s" % (
         mn.__appname__,mn.__version__), 72
     )
-    
+
     # Echo Settings
     mn.OUT.infMsg("Master file: %s" % masterFile)
-    
+
     theBook = Book(masterFile)
     theBook.buildTree()
-    
+
     mn.OUT.infMsg("")
-    
+
     return False

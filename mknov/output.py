@@ -15,11 +15,11 @@ import mknov   as mn
 logger = logging.getLogger(__name__)
 
 class Output():
-    
+
     def __init__(self):
-        
+
         return
-    
+
     def printHeader(self, headString, headLen=72):
         strLen = len(headString)
         strInd = round((headLen-strLen)/2)
@@ -29,23 +29,23 @@ class Output():
         print("*"*headLen)
         print("")
         return True
-    
+
     def infMsg(self, msgString):
         print(msgString)
         return True
-    
+
     def errMsg(self, msgString):
         print("Error: %s" % msgString)
         return True
-    
+
     def wrnMsg(self, msgString):
         print("Warning: %s" % msgString)
         return True
-        
+
     def dbgMsg(self, msgString):
         print("Debug: %s" % msgString)
         return True
-    
+
     def critMsg(self, msgString, actionString):
         strLen = len(msgString)
         if strLen < 14:
@@ -58,5 +58,5 @@ class Output():
         print("*"*(strLen+6))
         print(actionString)
         print("")
-    
+
 # End Class Output

@@ -45,11 +45,11 @@ OUT = Output()
 #
 
 def main(sysArgs):
-    
+
     #
     # Logging
     #
-    
+
     # Defaults
     debugLevel = logging.DEBUG
     debugStr   = "%(levelname)-8s  %(message)s"
@@ -58,40 +58,40 @@ def main(sysArgs):
     toFile     = False
     toStd      = True
     showTime   = False
-    
+
     # Read logging settings
     mnConf = Config()
     if mnConf.findConfig():
         pass
-        
+
     # Set Logging
     if showTime:
         debugStr = timeStr+debugStr
     logFmt = logging.Formatter(fmt=debugStr,datefmt="%Y-%m-%d %H:%M:%S")
-    
+
     if not logFile == "" and toFile:
         if path.isfile(logFile+".bak"):
             remove(logFile+".bak")
         if path.isfile(logFile):
             rename(logFile,logFile+".bak")
-        
+
         fHandle = logging.FileHandler(logFile)
         fHandle.setLevel(debugLevel)
         fHandle.setFormatter(logFmt)
         logger.addHandler(fHandle)
-    
+
     if toStd:
         cHandle = logging.StreamHandler()
         cHandle.setLevel(debugLevel)
         cHandle.setFormatter(logFmt)
         logger.addHandler(cHandle)
-    
+
     logger.setLevel(debugLevel)
-    
+
     #
     # Parse Iinput and Call Submodules
     #
-    
+
     helpMsg = (
         "{appname} {version} ({status})\n"
         "{copyright}\n"
@@ -113,14 +113,14 @@ def main(sysArgs):
         status    = __status__,
         copyright = __copyright__
     )
-    
+
     if len(sysArgs) == 0:
         print(helpMsg)
         return True
-    
+
     theCmd  = sysArgs[0]  # The command called
     theArgs = sysArgs[1:] # The args to pass on to the command class
-    
+
     if theCmd == "init":
         return initProject(theArgs)
     elif theCmd == "make":
@@ -142,5 +142,5 @@ def main(sysArgs):
     else:
         print(helpMsg)
         return True
-    
+
     return False

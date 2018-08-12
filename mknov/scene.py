@@ -18,9 +18,9 @@ from .parser import Parser
 from .error  import ErrHandler, ErrCodes
 
 class Scene():
-    
+
     def __init__(self, sceneFile):
-        
+
         foundFile = ""
         if path.isfile(sceneFile):
             foundFile = sceneFile
@@ -30,11 +30,11 @@ class Scene():
             mn.OUT.errMsg("Scene file not found: %s" % sceneFile)
             ErrHandler.terminateExec(ErrCodes.ERR_FILENOTFOUND)
             return
-        
+
         self.sceneFile  = ""
         self.theScene   = Parser(foundFile)
         self.sceneTitle = ""
-        
+
         return
-    
+
 # End Class Scene

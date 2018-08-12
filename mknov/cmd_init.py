@@ -20,9 +20,9 @@ from mknov.config import Config
 logger = logging.getLogger(__name__)
 
 def initProject(sysArgs):
-    
+
     logger.info("Initialising new makeNovel project")
-    
+
     # Valid Input Options
     shortOpt = "hne"
     longOpt  = [
@@ -30,7 +30,7 @@ def initProject(sysArgs):
         "new",
         "empty",
     ]
-    
+
     helpMsg = (
         "novelWriter Init Module\n"
         "\n"
@@ -43,20 +43,20 @@ def initProject(sysArgs):
         status    = mn.__status__,
         copyright = mn.__copyright__
     )
-    
+
     # Check config
     mnConf = Config()
     if mnConf.findConfig():
         logger.error("Project folder already exists.")
         return False
-    
+
     # Parse Options
     try:
         inOpts, inArgs = getopt.getopt(sysArgs,shortOpt,longOpt)
     except getopt.GetoptError:
         print(helpMsg)
         exit(2)
-    
+
     # Parse Input
     for inOpt, inArg in inOpts:
         if inOpt in ("-h","--help"):
@@ -67,5 +67,5 @@ def initProject(sysArgs):
         elif inOpt in ("-e","--empty"):
             mnConf.setConfig()
             mnConf.saveConfig()
-    
+
     return True

@@ -14,14 +14,14 @@ import logging
 import mknov   as mn
 
 class Chapter():
-    
+
     TYP_NONE        = 0
     TYP_FRONTMATTER = 1
     TYP_PROLOGUE    = 2
     TYP_CHAPTER     = 3
     TYP_EPILOGUE    = 4
     TYP_BACKMATTER  = 5
-    
+
     REV_TYPE = [
         "Not Specified",
         "Front Matter",
@@ -30,7 +30,7 @@ class Chapter():
         "Epilogue",
         "Back Matter"
     ]
-    
+
     MAP_TYPE = {
         "frontmatter" : TYP_FRONTMATTER,
         "prologue"    : TYP_PROLOGUE,
@@ -38,19 +38,19 @@ class Chapter():
         "epilogue"    : TYP_EPILOGUE,
         "backmatter"  : TYP_BACKMATTER
     }
-    
+
     def __init__(self, chTitle, chType):
-        
+
         self.chapterName    = chTitle
         self.chapterType    = chType
         self.chapterCompile = True
         self.chapterNumber  = None
         self.chapterScenes  = []
-        
+
         return
-    
+
     def addScene(self, sceneIndex):
         self.chapterScenes.append(sceneIndex)
         return True
-    
+
 # End Class Chapter
