@@ -11,7 +11,7 @@ Created:   2018-03-04 [0.1.0]
 
 import logging
 import getopt
-import mknov   as mn
+import mknov as mn
 
 from os import path, getcwd, pardir
 

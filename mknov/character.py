@@ -14,9 +14,9 @@ import mknov as mn
 
 class Character():
 
-    def __init__(self, chID):
+    def __init__(self, charID):
 
-        self.charID         = chID
+        self.charID         = charID
         self.charName       = ""
         self.charStatus     = ""
         self.charImportance = 0

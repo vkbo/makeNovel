@@ -3,7 +3,7 @@
 
 makeNovel – Parser Class
 ========================
-Parses the tree of files and holds the raw data
+Parses the tree of files and holds the raw data of command lines
 
 File History:
 Created: 2018-03-15 [0.1.0]
@@ -25,19 +25,21 @@ class Parser():
     TYP_INT   = 2
     TYP_FLOAT = 3
     TYP_BOOL  = 4
+    TYP_VAR   = 5
 
     REV_TYPE  = [
         "none",
         "string",
         "integer",
         "float",
-        "boolean"
+        "boolean",
+        "variable"
     ]
 
     def __init__(self, inputFile):
 
         if not path.isfile(inputFile):
-            mn.OUT.errMsg("File not found %s " % inputFile)
+            mn.OUT.errMsg("File not found: %s " % inputFile)
 
         self.inFile    = inputFile
         self.rawBuffer = []
@@ -45,19 +47,13 @@ class Parser():
         self.filePos   = 0
 
         with open(self.inFile, mode="r") as theFile:
-
             lineNo = 0
-
             for theLine in theFile:
-
                 lineNo += 1
                 theLine = theLine.strip()
-
-                # Skip comments
                 if len(theLine) > 0:
                     if theLine[0] == "#":
                         continue
-
                 self.rawBuffer.append(theLine)
                 self.rawLineNo.append(lineNo)
 
@@ -80,9 +76,7 @@ class Parser():
         theTarget  = ""
         theData    = ""
         theType    = self.TYP_NONE
-
         theStage   = 0
-
         isCommand  = False
         isTarget   = False
         isData     = False
@@ -134,6 +128,9 @@ class Parser():
             elif self.isFloat(theData):
                 theType = self.TYP_FLOAT
                 theData = float(theData)
+            elif self.isVariable(theData):
+                theType = self.TYP_VAR
+                theData = theData.strip()
             else:
                 theData = ""
                 mn.OUT.errMsg("Unknown data entry on line %d in file: %s" % (
@@ -167,5 +164,15 @@ class Parser():
             return False
         else:
             return floatVal == intVal
+
+    def isVariable(self, testVal):
+        sFirst = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        sValid = sFirst+"0123456789_"
+        nChar  = len(testVal)
+        if nChar == 0: return False
+        if testVal[0] not in sFirst: return False
+        for i in range(1,nChar):
+            if testVal[i] not in sValid: return False
+        return True
 
 # End Class Parser

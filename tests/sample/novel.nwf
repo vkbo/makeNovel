@@ -8,18 +8,23 @@
 @set book.author: "Jane Smith"
 @set book.status: "First Draft"
 
-@add character: "Sam"
+@add character: Sam
     @set character.name:       "Samantha Jones"
     @set character.status:     "Main"
     @set character.importance: 10
 
-@add prologue: "Prologue"
+@add chapter: chPrologue
+    @set chapter.title:    "Prologue"
+    @set chapter.type:     prologue
+    @set chapter.numbered: false
     @add scene: "pre-one"
     @add scene: "pre-two"
 
-@add chapter: "Chapter One"
+@add chapter: chOne
+    @set chapter.title: "Chapter One"
     @add scene: "scene-one"
     @add scene: "scene-two"
 
-@add chapter: "Chapter Three"
+@add chapter: chThree
+    @set chapter.title: "Chapter Three"
     @add scene: "scene-three"

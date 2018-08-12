@@ -39,15 +39,35 @@ class Chapter():
         "backmatter"  : TYP_BACKMATTER
     }
 
-    def __init__(self, chTitle, chType):
+    def __init__(self, chID):
 
-        self.chapterName    = chTitle
-        self.chapterType    = chType
-        self.chapterCompile = True
-        self.chapterNumber  = None
-        self.chapterScenes  = []
+        self.chapterID       = chID
+        self.chapterTitle    = None
+        self.chapterType     = self.TYP_CHAPTER
+        self.chapterNumbered = True
+        self.chapterCompile  = True
+        self.chapterNumber   = None
+        self.chapterScenes   = []
+
+        self.numberedSet     = False
 
         return
+
+    def setTitle(self, theCmd):
+        self.chapterTitle = theCmd["data"]
+        return True
+
+    def setType(self, theCmd):
+        if theCmd["data"].lower() in self.MAP_TYPE.keys():
+            self.chapterType = self.MAP_TYPE[theCmd["data"]]
+        if self.chapterType == self.TYP_CHAPTER and not self.numberedSet:
+            self.chapterNumbered = True
+        return True
+
+    def setNumbered(self, theCmd):
+        self.chapterNumbered = theCmd["data"]
+        self.numberedSet     = True
+        return True
 
     def addScene(self, sceneIndex):
         self.chapterScenes.append(sceneIndex)

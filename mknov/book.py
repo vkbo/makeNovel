@@ -80,23 +80,19 @@ class Book():
 
                 # Add New Character
                 if theCmd["target"] == "character":
-                    newID        = self.validData(theCmd,Parser.TYP_STR)
+                    newID        = self.validData(theCmd,Parser.TYP_VAR)
                     newCharacter = Character(newID)
                     self.bookCharacters.append(newCharacter)
                     self.currCharacter = len(self.bookCharacters) - 1
-                    mn.OUT.infMsg(" > Added character: \"%s\"" % newID)
+                    mn.OUT.infMsg(" > Added character: %s" % newID)
 
                 # Add New Chapter
                 elif theCmd["target"] in Chapter.MAP_TYPE.keys():
-                    newTitle   = self.validData(theCmd,Parser.TYP_STR)
-                    newType    = Chapter.MAP_TYPE[theCmd["target"]]
-                    newChapter = Chapter(newTitle,newType)
+                    newID      = self.validData(theCmd,Parser.TYP_VAR)
+                    newChapter = Chapter(newID)
                     self.bookChapters.append(newChapter)
                     self.currChapter = len(self.bookChapters) - 1
-                    mn.OUT.infMsg(" > Added %s with title \"%s\"" % (
-                        Chapter.REV_TYPE[newType],
-                        newTitle
-                    ))
+                    mn.OUT.infMsg(" > Added chapter: %s" % newID)
 
                 # Add New Scene
                 elif theCmd["target"] == "scene":
@@ -106,7 +102,7 @@ class Book():
                         self.bookScenes.append(newScene)
                         newIndex = len(self.bookScenes) - 1
                         self.bookChapters[self.currChapter].addScene(newIndex)
-                        mn.OUT.infMsg("   > Added scene file: %s" % newFile)
+                        mn.OUT.infMsg("   > Added scene file: \"%s\"" % newFile)
 
                 # If Reached, Error
                 else:
@@ -122,28 +118,42 @@ class Book():
                 # Book Meta
                 if theCmd["target"] == "book.title":
                     self.bookTitle = self.validData(theCmd,Parser.TYP_STR)
-                    mn.OUT.infMsg(" > Book title set to: %s" % self.bookTitle)
+                    self.setMessage("book title",0,theCmd)
                 elif theCmd["target"] == "book.author":
                     newAuthor = self.validData(theCmd,Parser.TYP_STR)
                     self.bookAuthor.append(newAuthor)
-                    mn.OUT.infMsg(" > Added author: %s" % newAuthor)
+                    self.setMessage("book authore",0,theCmd)
                 elif theCmd["target"] == "book.status":
                     self.bookStatus = self.validData(theCmd,Parser.TYP_STR)
-                    mn.OUT.infMsg(" > Book status set to: %s" % self.bookStatus)
+                    self.setMessage("book status",0,theCmd)
 
                 # Character Meta
                 elif theCmd["target"] == "character.name":
                     if self.hasCharacter(theCmd):
                         self.bookCharacters[self.currCharacter].setName(theCmd)
-                        mn.OUT.infMsg("   > Set character name to: \"{data}\"".format(**theCmd))
+                        self.setMessage("character name",1,theCmd)
                 elif theCmd["target"] == "character.status":
                     if self.hasCharacter(theCmd):
                         self.bookCharacters[self.currCharacter].setStatus(theCmd)
-                        mn.OUT.infMsg("   > Set character status to: \"{data}\"".format(**theCmd))
+                        self.setMessage("character status",1,theCmd)
                 elif theCmd["target"] == "character.importance":
                     if self.hasCharacter(theCmd):
                         self.bookCharacters[self.currCharacter].setImportance(theCmd)
-                        mn.OUT.infMsg("   > Set character importance to: \"{data}\"".format(**theCmd))
+                        self.setMessage("character importance",1,theCmd)
+
+                # Chapter Meta
+                elif theCmd["target"] == "chapter.title":
+                    if self.hasChapter(theCmd):
+                        self.bookChapters[self.currChapter].setTitle(theCmd)
+                        self.setMessage("chapter title",1,theCmd)
+                elif theCmd["target"] == "chapter.type":
+                    if self.hasChapter(theCmd):
+                        self.bookChapters[self.currChapter].setType(theCmd)
+                        self.setMessage("chapter type",1,theCmd)
+                elif theCmd["target"] == "chapter.numbered":
+                    if self.hasChapter(theCmd):
+                        self.bookChapters[self.currChapter].setNumbered(theCmd)
+                        self.setMessage("chapter numbered",1,theCmd)
 
                 # If Reached, Error
                 else:
@@ -174,17 +184,30 @@ class Book():
 
         return
 
+    def setMessage(self, theTarget, theLevel, theCmd):
+        sWrap = ""
+        if theCmd["type"] == Parser.TYP_STR: sWrap = "\""
+        mn.OUT.infMsg(" %s> Set %s to: %s%s%s" % (
+            "  "*theLevel,
+            theTarget,
+            sWrap,
+            theCmd["data"],
+            sWrap
+        ))
+        return
+
     def validData(self, theCmd, theType):
 
         if theCmd["type"] == theType:
             return theCmd["data"]
 
         mn.OUT.errMsg("{raw}".format(**theCmd))
-        mn.OUT.errMsg("Wrong data type %s for book.title, expected %s on line %d in file: %s" % (
-            Parser.REV_TYPE[theCmd["type"]],
+        mn.OUT.errMsg("Wrong data type for %s, expected %s, got %s in %s:%d" % (
+            theCmd["target"],
             Parser.REV_TYPE[theType],
-            theCmd["line"],
-            self.theMaster.inFile
+            Parser.REV_TYPE[theCmd["type"]],
+            self.theMaster.inFile,
+            theCmd["line"]
         ))
         ErrHandler.terminateExec(ErrCodes.ERR_DATATYPE)
 
