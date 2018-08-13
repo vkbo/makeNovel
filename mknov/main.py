@@ -15,7 +15,8 @@ import mknov as mn
 
 from os import path
 
-from mknov.error import ErrCodes, ErrHandler
+from mknov.error        import ErrCodes, ErrHandler
+from mknov.input.parser import Parser
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +24,7 @@ class MakeNovel():
 
     def __init__(self):
 
-        self.theBuffer = None
+        self.theParser = Parser()
 
         return
 
@@ -42,6 +43,12 @@ class MakeNovel():
             ErrHandler.terminateExec(ErrCodes.ERR_FILEINVALID)
 
         mn.CFG.setMasterFile(masterFile)
+
+        return True
+    
+    def buildInit(self):
+
+        self.theParser.loadBuffer(mn.CFG.masterFile)
 
         return True
 

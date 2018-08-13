@@ -83,10 +83,9 @@ def buildProject(sysArgs):
     # Echo Settings
     mn.OUT.infMsg("Master file: %s" % masterFile)
 
-    theProject = MakeNovel()
-    theProject.setMasterFile(masterFile)
-    #theBook = Book(masterFile)
-    #theBook.buildTree()
+    theNovel = MakeNovel()
+    theNovel.setMasterFile(masterFile)
+    theNovel.buildInit()
 
     mn.OUT.infMsg("")
     mn.CFG.saveConfig()

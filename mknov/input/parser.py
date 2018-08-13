@@ -44,7 +44,17 @@ class Parser():
         "object"
     ]
 
-    def __init__(self, rootFile):
+    def __init__(self):
+
+        self.fileList  = []
+        self.fileRead  = []
+        self.rawBuffer = []
+        self.rawLineNo = []
+        self.rawFileNo = []
+
+        return
+
+    def loadBuffer(self, rootFile):
 
         if not path.isfile(rootFile):
             mn.OUT.errMsg("File not found: %s " % rootFile)
@@ -55,14 +65,13 @@ class Parser():
         self.rawBuffer = []
         self.rawLineNo = []
         self.rawFileNo = []
-        self.filePos   = 0
 
-        self.loadBuffer(0)
+        self.recursiveRead(0)
         self.dumpBuffer()
 
         return
 
-    def loadBuffer(self, fileIdx):
+    def recursiveRead(self, fileIdx):
         """
         Recursively fill the buffer by opening include files and reading them.
         """
@@ -90,7 +99,7 @@ class Parser():
                         incFile = self.stringVal(theLine[8:].strip())
                         self.fileList.append(incFile)
                         self.fileRead.append(False)
-                        self.loadBuffer(len(self.fileList)-1)
+                        self.recursiveRead(len(self.fileList)-1)
                         continue
                 self.rawBuffer.append(theLine)
                 self.rawLineNo.append(lineNo)
@@ -103,7 +112,7 @@ class Parser():
         return
 
     def dumpBuffer(self):
-        with open("parser_buffer.dat", mode="w") as theFile:
+        with open(mn.CFG.projName+".raw", mode="w") as theFile:
             theFile.write("Dump of Parser Buffer\n\n")
             theFile.write("FileList [fileNo: fileName]\n")
             theFile.write("="*80+"\n")

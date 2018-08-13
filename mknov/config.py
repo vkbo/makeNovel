@@ -34,6 +34,8 @@ class Config():
         self.logFile    = True
         self.logStdOut  = False
         self.masterFile = ""
+
+        # Derived Settings
         self.projName   = ""
 
         return
@@ -70,7 +72,7 @@ class Config():
             if "master" in conf["Build"]:
                 self.masterFile = conf["Build"].get("master")
 
-        # Set Related Settings
+        # Set Derived Settings
         self.projName = self.masterFile[:-4]
 
         return True

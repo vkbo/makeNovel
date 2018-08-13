@@ -12,4 +12,6 @@ Created:   2018-08-13 [0.1.0]
 
 import mknov as mn
 
-__all__ = []
+from mknov.input.parser import Parser
+
+__all__ = ["Parser"]
