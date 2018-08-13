@@ -15,8 +15,9 @@ import mknov   as mn
 
 from os import path, getcwd, pardir
 
-from mknov.config import Config
-from mknov.book   import Book
+from mknov.error   import ErrHandler, ErrCodes
+from mknov.config  import Config
+from mknov.main    import MakeNovel
 
 logger = logging.getLogger(__name__)
 
@@ -46,11 +47,8 @@ def buildProject(sysArgs):
         copyright = mn.__copyright__
     )
 
-    # Check config
-    mnConf = Config()
-
     # Default Values
-    masterFile    = "Unknown"
+    masterFile    = mn.CFG.masterFile
     buildTimeLine = False
 
     # Parse Options
@@ -67,12 +65,15 @@ def buildProject(sysArgs):
             return True
         elif inOpt in ("-m","--master"):
             masterFile = inArg
-        elif inOpt in ("-f","--full"):
-            pass
 
     #
     # Execute Build
     #
+
+    if masterFile == "":
+        mn.OUT.errMsg("No master file specified")
+        ErrHandler.terminateExec(ErrCodes.ERR_MISSINGINFO)
+        exit(2)
 
     # Command Header
     mn.OUT.printHeader("This is %s build - version %s" % (
@@ -82,9 +83,12 @@ def buildProject(sysArgs):
     # Echo Settings
     mn.OUT.infMsg("Master file: %s" % masterFile)
 
-    theBook = Book(masterFile)
-    theBook.buildTree()
+    theProject = MakeNovel()
+    theProject.setMasterFile(masterFile)
+    #theBook = Book(masterFile)
+    #theBook.buildTree()
 
     mn.OUT.infMsg("")
+    mn.CFG.saveConfig()
 
     return False

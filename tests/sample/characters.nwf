@@ -1,0 +1,4 @@
+@add character: Sam
+    @set character.name:       "Samantha Jones"
+    @set character.status:     "Main"
+    @set character.importance: 10

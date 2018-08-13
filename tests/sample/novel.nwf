@@ -8,10 +8,7 @@
 @set book.author: "Jane Smith"
 @set book.status: "First Draft"
 
-@add character: Sam
-    @set character.name:       "Samantha Jones"
-    @set character.status:     "Main"
-    @set character.importance: 10
+@include "characters.nwf"
 
 @add chapter: chPrologue
     @set chapter.title:    "Prologue"

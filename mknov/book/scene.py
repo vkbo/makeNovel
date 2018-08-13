@@ -14,8 +14,8 @@ import mknov as mn
 
 from os import path
 
-from .parser import Parser
-from .error  import ErrHandler, ErrCodes
+from mknov.input.parser import Parser
+from mknov.error        import ErrHandler, ErrCodes
 
 class Scene():
 

@@ -14,11 +14,11 @@ import mknov as mn
 
 from os         import path
 
-from .error     import ErrHandler, ErrCodes
-from .parser    import Parser
-from .chapter   import Chapter
-from .scene     import Scene
-from .character import Character
+from mknov.error          import ErrHandler, ErrCodes
+from mknov.input.parser   import Parser
+from mknov.book.chapter   import Chapter
+from mknov.book.scene     import Scene
+from mknov.book.character import Character
 
 class Book():
 
@@ -80,7 +80,7 @@ class Book():
 
                 # Add New Character
                 if theCmd["target"] == "character":
-                    newID        = self.validData(theCmd,Parser.TYP_VAR)
+                    newID        = self.validData(theCmd,Parser.TYP_OBJ)
                     newCharacter = Character(newID)
                     self.bookCharacters.append(newCharacter)
                     self.currCharacter = len(self.bookCharacters) - 1
@@ -88,7 +88,7 @@ class Book():
 
                 # Add New Chapter
                 elif theCmd["target"] in Chapter.MAP_TYPE.keys():
-                    newID      = self.validData(theCmd,Parser.TYP_VAR)
+                    newID      = self.validData(theCmd,Parser.TYP_OBJ)
                     newChapter = Chapter(newID)
                     self.bookChapters.append(newChapter)
                     self.currChapter = len(self.bookChapters) - 1
@@ -109,6 +109,12 @@ class Book():
                     mn.OUT.errMsg("{raw}".format(**theCmd))
                     mn.OUT.errMsg("Unknown command target \"{target}\"".format(**theCmd))
                     ErrHandler.terminateExec(ErrCodes.ERR_COMMAND)
+
+            #
+            # WITH Command
+            #
+            elif theCmd["command"] == "@with":
+                pass
 
             #
             # SET Command

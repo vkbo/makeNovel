@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*
 """makeNovel Output Class
 
 makeNovel – Output Class
@@ -32,18 +33,26 @@ class Output():
 
     def infMsg(self, msgString):
         print(msgString)
+        if msgString is not "":
+            logger.info(msgString)
         return True
 
     def errMsg(self, msgString):
         print("Error: %s" % msgString)
+        if msgString is not "":
+            logger.error(msgString)
         return True
 
     def wrnMsg(self, msgString):
         print("Warning: %s" % msgString)
+        if msgString is not "":
+            logger.warning(msgString)
         return True
 
     def dbgMsg(self, msgString):
         print("Debug: %s" % msgString)
+        if msgString is not "":
+            logger.debug(msgString)
         return True
 
     def critMsg(self, msgString, actionString):

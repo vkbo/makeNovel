@@ -12,15 +12,12 @@ Rewritten: 2018-03-04 [0.1.0] Split up into sub commands
 """
 
 import logging
-
 from os import path, remove, rename
 
-from .config import Config
-from .output import Output
-
-from .cmd_init  import initProject
-from .cmd_make  import makeProject
-from .cmd_build import buildProject
+from mknov.config    import Config
+from mknov.output    import Output
+from mknov.cmd_make  import makeProject
+from mknov.cmd_build import buildProject
 
 __appname__    = "makeNovel"
 __author__     = "Veronica Berglyd Olsen"
@@ -37,8 +34,9 @@ __url__        = "https://github.com/vkbo/makeNovel"
 # Initiating logging
 logger = logging.getLogger(__name__)
 
-# Create config object
+# Create output object
 OUT = Output()
+CFG = Config()
 
 #
 # Main program
@@ -56,13 +54,16 @@ def main(sysArgs):
     timeStr    = "[%(asctime)s] "
     logFile    = ""
     toFile     = False
-    toStd      = True
-    showTime   = False
+    toStd      = False
+    showTime   = True
 
     # Read logging settings
-    mnConf = Config()
-    if mnConf.findConfig():
-        pass
+    if CFG.findConfig():
+        CFG.loadConfig()
+        debugLevel = CFG.logLevel
+        toFile     = CFG.logFile
+        toStd      = CFG.logStdOut
+        logFile    = CFG.projName
 
     # Set Logging
     if showTime:
@@ -70,6 +71,7 @@ def main(sysArgs):
     logFmt = logging.Formatter(fmt=debugStr,datefmt="%Y-%m-%d %H:%M:%S")
 
     if not logFile == "" and toFile:
+        logFile += ".log"
         if path.isfile(logFile+".bak"):
             remove(logFile+".bak")
         if path.isfile(logFile):
@@ -87,9 +89,10 @@ def main(sysArgs):
         logger.addHandler(cHandle)
 
     logger.setLevel(debugLevel)
+    logger.info("Running makeNovel Version %s" % __version__)
 
     #
-    # Parse Iinput and Call Submodules
+    # Parse Input and Call Submodules
     #
 
     helpMsg = (
@@ -97,7 +100,6 @@ def main(sysArgs):
         "{copyright}\n"
         "\n"
         "List of Commands:\n"
-        "  init      Sets up a new project.\n"
         "  make      Make the novel file tree into various output formats.\n"
         "  build     Build various outputs like story timeline, etc.\n"
         "  analyse   Prints a list of statistics like word count, etc.\n"
@@ -121,9 +123,7 @@ def main(sysArgs):
     theCmd  = sysArgs[0]  # The command called
     theArgs = sysArgs[1:] # The args to pass on to the command class
 
-    if theCmd == "init":
-        return initProject(theArgs)
-    elif theCmd == "make":
+    if theCmd == "make":
         return makeProject(theArgs)
     elif theCmd == "build":
         return buildProject(theArgs)

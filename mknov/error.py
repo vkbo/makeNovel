@@ -14,10 +14,12 @@ import mknov as mn
 
 class ErrCodes():
 
-    ERR_DATATYPE     = 1
-    ERR_COMMAND      = 2
-    ERR_SETBFADD     = 3
-    ERR_FILENOTFOUND = 4
+    ERR_MISSINGINFO  = 1
+    ERR_DATATYPE     = 2
+    ERR_COMMAND      = 3
+    ERR_SETBFADD     = 4
+    ERR_FILENOTFOUND = 5
+    ERR_FILEINVALID  = 6
 
 # End Class ErrCodes
 
@@ -26,7 +28,9 @@ class ErrHandler():
     @staticmethod
     def terminateExec(errType):
 
-        if errType == ErrCodes.ERR_DATATYPE:
+        if errType == ErrCodes.ERR_MISSINGINFO:
+            mn.OUT.critMsg("Input information missing","Terminating ...")
+        elif errType == ErrCodes.ERR_DATATYPE:
             mn.OUT.critMsg("A datatype error was encountered","Terminating ...")
         elif errType == ErrCodes.ERR_COMMAND:
             mn.OUT.critMsg("An unknown command sequence was encountered","Terminating ...")
@@ -34,6 +38,8 @@ class ErrHandler():
             mn.OUT.critMsg("Attempting to set value before adding item","Terminating ...")
         elif errType == ErrCodes.ERR_FILENOTFOUND:
             mn.OUT.critMsg("File not found","Terminating ...")
+        elif errType == ErrCodes.ERR_FILEINVALID:
+            mn.OUT.critMsg("Invalid file","Terminating ...")
         else:
             mn.OUT.critMsg("An unknown error was encountered","Terminating ...")
 
