@@ -1,6 +1,6 @@
 ## makeNovel
 
-### NOTE: I am in the process of rewriting this tool from scratch. Unfortunately I don't currently have the time for it, so it is left in a half-finished state and is therefore not usable.
+### NOTE: This tool will not be completed. I decided to go for a full GUI appliaction instead named novelWriter.
 
 makeNovel is a tool, written in Python3, to assist in writing novels. It is intended to be used with an extended markdown format designed to work with this tool.
 
